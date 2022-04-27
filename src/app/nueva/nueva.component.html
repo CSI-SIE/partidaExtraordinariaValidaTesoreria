@@ -1,0 +1,196 @@
+<mat-toolbar color="primary">
+Nueva partida extraordinaria
+</mat-toolbar>
+
+<div class="container">
+    <div fxLayout="column">
+      <!--Radio buttons----------------------------------->
+      <div class="containerIn">
+      <mat-radio-group  fxLayout="row"
+      fxLayoutAlign="space-around center"
+      fxLayout.xs="column"
+      fxLayoutGap.xs="10px"
+      fxLayoutAlign.xs="start"
+      [(ngModel)]="partidaExtraordinariaSeleccionada" [ngModelOptions]="{standalone: true}"
+      >
+      <mat-radio-button *ngFor="let opcion of tipoPartidaExtraordinaria" [value]="opcion">
+        {{opcion}}
+      </mat-radio-button>
+      </mat-radio-group>
+    </div>
+      <!--Radio buttons----------------------------------->
+
+<!-------------------------------------------------------------------------------------------------------->
+      <div class="containerIn">
+
+        <p *ngIf="partidaExtraordinariaSeleccionada=='Compra general'">
+          Es cuando se va a realizar alguna compra para adquirir un servicio o producto ya cotizado.</p>
+        <p *ngIf="partidaExtraordinariaSeleccionada=='Gastos a comprobar'">
+          Es cuando necesita pedir dinero para adquirir algun producto o servicio.</p>
+        <p *ngIf="partidaExtraordinariaSeleccionada=='Reembolso'">
+          Para solicitar la devolución de dinero a la persona que uso para adquirir un servicio o producto.</p>
+        <p *ngIf="partidaExtraordinariaSeleccionada=='Gastos de viajes'">
+          Cuando se requiera solicitar los viaticos a una persona para trasladarse a otra ciudad (hospedaje, transporte, alimentos, taxis).</p>
+
+
+        <mat-divider></mat-divider>
+        <br>
+        <form [formGroup]="formNuevaSolicitud">
+
+        <!--Contenedor interno completo-->
+        <div fxLayout="row" fxLayoutGap="20px" fxLayout.xs="column">
+          <!--Columna de la izquierda-->
+          <div fxLayout="column" fxFlex="50">
+
+            <mat-form-field appearance="fill">
+              <mat-label>Descripción completa del articulo o servicio:</mat-label>
+              <textarea matInput formControlName="Descripcion" placeholder="Descripción completa del articulo o servicio"></textarea>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Proveedor:</mat-label>
+              <input matInput formControlName="Proveedor" placeholder="Ingresa un proveedor" value="">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Justificación:</mat-label>
+              <textarea matInput formControlName="Justificacion" placeholder="Justificación"></textarea>
+            </mat-form-field>
+
+            <mat-checkbox formControlName="EquipoComputo"
+            *ngIf="partidaExtraordinariaSeleccionada=='Compra general' || partidaExtraordinariaSeleccionada=='Reembolso'"
+            color="primary" >
+            Es equipo de computo
+            </mat-checkbox>
+
+          </div>
+
+
+          <!--Columna de la derecha-->
+          <div fxLayout="column" fxFlex="40">
+            <div fxLayout="column">
+
+              <mat-form-field appearance="fill">
+                <mat-label>Costo actual:</mat-label>
+                <input formControlName="CostoActual" matInput placeholder="Ingresa un costo" (keyup)="onKeyUp()">
+              </mat-form-field>
+
+
+            </div>
+            <!--Detalle por conceptos-->
+            <p *ngIf="partidaExtraordinariaSeleccionada!='Compra general'">Detalle por concepto</p>
+            <mat-divider *ngIf="partidaExtraordinariaSeleccionada!='Compra general'"></mat-divider>
+            <div *ngIf="partidaExtraordinariaSeleccionada!='Compra general'" fxLayout="row" fxLayoutGap="20px">
+              <div flexLayout="row" fxLayoutGap="10px" fxFlex="80" fxLayoutAlign="start center">
+                <mat-form-field fxFlex="65" [floatLabel]="'auto'" appearance="fill">
+                  <mat-label>Concepto:</mat-label>
+                  <input formControlName="ConceptoPorDetalle" matInput placeholder="Detalle del concepto" value="">
+                </mat-form-field>
+
+                <mat-form-field fxFlex="20" [floatLabel]="'auto'" appearance="fill">
+                  <mat-label>Monto:</mat-label>
+                  <input formControlName="Monto" matInput formControlName="Monto" placeholder="Monto" (keyup)="onKeyUp()">
+                </mat-form-field>
+              </div>
+              <div fxLayout="row" fxLayoutGap="5px" fxFlex="20" fxLayoutAlign="space-around center" fxLayout.xs="column">
+                  <button  type="submit" mat-flat-button color="primary">+</button>
+                  <button  type="submit" mat-flat-button color="primary">x</button>
+                  <br>
+              </div>
+            </div>
+<!--
+            <div *ngIf="partidaExtraordinariaSeleccionada!='Compra general'" fxLayout="row" fxLayoutGap="20px">
+              <div flexLayout="row" fxLayoutGap="10px" fxFlex="80" fxLayoutAlign="start center">
+                <mat-form-field fxFlex="65" [floatLabel]="'auto'" appearance="fill">
+                  <mat-label>Concepto:</mat-label>
+                  <input matInput placeholder="Detalle del concepto" value="">
+                </mat-form-field>
+
+                <mat-form-field fxFlex="20" [floatLabel]="'auto'" appearance="fill">
+                  <mat-label>Monto:</mat-label>
+                  <input matInput placeholder="Monto" value="">
+                </mat-form-field>
+              </div>
+              <div fxLayout="row" fxLayoutGap="5px" fxFlex="20" fxLayoutAlign="space-around center" fxLayout.xs="column">
+                  <button  type="submit" mat-flat-button color="primary">+</button>
+                  <button  type="submit" mat-flat-button color="primary">x</button>
+                  <br>
+              </div>
+            </div>
+
+            <div *ngIf="partidaExtraordinariaSeleccionada!='Compra general'" fxLayout="row" fxLayoutGap="20px">
+              <div flexLayout="row" fxLayoutGap="10px" fxFlex="80" fxLayoutAlign="start center">
+                <mat-form-field fxFlex="65" [floatLabel]="'auto'" appearance="fill">
+                  <mat-label>Concepto:</mat-label>
+                  <input matInput placeholder="Detalle del concepto" value="">
+                </mat-form-field>
+
+                <mat-form-field fxFlex="20" [floatLabel]="'auto'" appearance="fill">
+                  <mat-label>Monto:</mat-label>
+                  <input matInput placeholder="Monto" value="">
+                </mat-form-field>
+              </div>
+              <div fxLayout="row" fxLayoutGap="5px" fxFlex="20" fxLayoutAlign="space-around center" fxLayout.xs="column">
+                  <button  type="submit" mat-flat-button color="primary">+</button>
+                  <button  type="submit" mat-flat-button color="primary">x</button>
+                  <br>
+              </div>
+            </div>
+
+            <div *ngIf="partidaExtraordinariaSeleccionada!='Compra general'" fxLayout="row" fxLayoutGap="20px">
+              <div flexLayout="row" fxLayoutGap="10px" fxFlex="80" fxLayoutAlign="start center">
+                <mat-form-field fxFlex="65" [floatLabel]="'auto'" appearance="fill">
+                  <mat-label>Concepto:</mat-label>
+                  <input matInput placeholder="Detalle del concepto" value="">
+                </mat-form-field>
+
+                <mat-form-field fxFlex="20" [floatLabel]="'auto'" appearance="fill">
+                  <mat-label>Monto:</mat-label>
+                  <input matInput placeholder="Monto" value="">
+                </mat-form-field>
+              </div>
+              <div fxLayout="row" fxLayoutGap="5px" fxFlex="20" fxLayoutAlign="space-around center" fxLayout.xs="column">
+                  <button  type="submit" mat-flat-button color="primary">+</button>
+                  <button type="submit" mat-flat-button color="primary">x</button>
+                  <br>
+              </div>
+            </div>
+-->
+            <mat-divider *ngIf="partidaExtraordinariaSeleccionada!='Compra general'"></mat-divider>
+            <!--Totales-->
+            <div *ngIf="partidaExtraordinariaSeleccionada!='Compra general'" fxLayout="row" fxLayoutGap="5px">
+              <div fxLayout="column" fxLayoutAlign="center end">
+                <p>Faltante por detallar: </p>
+                <p>Total: </p>
+              </div>
+              <div fxLayout="column">
+                <p>$ {{faltanteDetallar}}</p>
+                <p>$ {{sumaMontosPorConcepto}}</p>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+        <div  fxLayout="column">
+          <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="center center" fxLayout.xs="column">
+            <button type="submit" mat-flat-button color="primary">Guardar</button>
+            <button [routerLink]="['/inicio']"  type="submit" mat-flat-button color="primary">Cancelar</button>
+            <br>
+        </div>
+        </div>
+
+        </form>
+
+      </div>
+
+
+
+
+
+    </div>
+
+
+
+</div>

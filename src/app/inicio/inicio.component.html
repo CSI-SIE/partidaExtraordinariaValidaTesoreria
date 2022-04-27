@@ -1,0 +1,30 @@
+<mat-toolbar color="primary">
+Partidas extraordinarias
+</mat-toolbar>
+<div class="container">
+<div fxLayout="column" fxLayoutAlign="center center">
+<h1>Inicio</h1>
+<button [routerLink]="['/nuevo']" >Nuevo</button>
+</div>
+
+
+  <!--<div fxLayout="column">
+    <div class="container-upload">
+      <button    >
+          SUBIR ARCHIVO
+      </button>
+      <input name="file" id="file" type="file" >
+    </div>
+  </div>-->
+
+  <div fxLayout="column">
+    <!-- Inicia tabla para mostrar los datos -->
+    <tabla-dinamica
+    [resultadosPartidasExtraordinarias]="resultadosPartidasExtraordinarias"
+    [pageSizeOptions]="pageSizeOptions"
+    [displayedColumns]="displayedColumnsGrupo"
+    [tamanoTabla]="tamanoTabla" >
+    </tabla-dinamica>
+    <!-- Finaliza tabla -->
+  </div>
+</div>
