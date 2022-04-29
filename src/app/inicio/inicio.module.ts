@@ -15,10 +15,9 @@ import { MaterialModule } from 'src/shared/material/material.module';
 import { MatDividerModule } from '@angular/material/divider';
 import { NuevaComponent } from '../nueva/nueva.component';
 import { TablaDinamicaComponent } from '../tabla-dinamica/tabla-dinamica.component';
-import { UploadComponent } from '../subirArchivos/upload/upload.component';
-import { DownloadComponent } from '../subirArchivos/download/download.component';
-import { FileManagerComponent } from '../subirArchivos/file-manager/file-manager.component';
-import { UploadDownloadService } from '../services/upload-download.service';
+
+import { ValidaDirectorVicerrectorComponent } from '../valida-director-vicerrector/valida-director-vicerrector.component';
+import { AprobarRechazarComponent } from '../aprobar-rechazar/aprobar-rechazar.component';
 
 
 
@@ -26,8 +25,9 @@ import { UploadDownloadService } from '../services/upload-download.service';
   declarations: [
     InicioComponent,
     NuevaComponent,
-    TablaDinamicaComponent
-
+    TablaDinamicaComponent,
+    ValidaDirectorVicerrectorComponent,
+    AprobarRechazarComponent
   ],
   imports: [
     CommonModule,

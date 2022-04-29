@@ -46,6 +46,40 @@ export class CatalogosService extends ServicioBase {
   }
   //--------
 
+  public guardarValidacion(): Observable<any>{
+    const parametros = {
+      servicio: 'catalogo',
+      accion: 'NOMBRE DE LA API',
+      acciones: 1,
+      descripcionDelPeriodo: 'FALTA CAMBIAR EL NOMBRE AQUI',
+      tipoRespuesta: 'json'
+    };
+    return this.consulta(parametros);
+  }
+
+  public recuperaPeriodos(): Observable<any>{
+    const parametros = {
+      servicio: 'catalogo',
+      accion: 'NOMBRE DE LA API',
+      acciones: 1,
+      tipoRespuesta: 'json'
+    };
+    return this.consulta(parametros);
+  }
+
+  public guardarValidacionRechazo(_id:number,_validadoRechazado:string)
+  {
+    const parametros = {
+      servicio: 'catalogo',
+      accion: 'NOMBRE DE LA API',
+      acciones: 1,
+      id: _id,
+      validadoRechazado: _validadoRechazado,
+      tipoRespuesta: 'json'
+    };
+    return this.consulta(parametros);
+  }
+
   public recuperarQuejasSugerencias(_idTipoAyuda: number, _anio: number, _idEstatus:number): Observable<any[]>{
     const parametros = {
       accion: 'DEF_Defensoria_ListadoAyuda',
@@ -58,5 +92,7 @@ export class CatalogosService extends ServicioBase {
     };
     return this.consulta(parametros);
   }
+
+
 
 }

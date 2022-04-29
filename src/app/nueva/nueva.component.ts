@@ -1,6 +1,8 @@
+import { _isNumberValue } from '@angular/cdk/coercion';
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
+
 
 @Component({
   selector: 'app-nueva',
@@ -55,20 +57,14 @@ export class NuevaComponent implements OnInit {
       ],
       EquipoComputo:[
         false,
-        [
-
-        ]
-      ],
-      ConceptoPorDetalle:[
-        '',
-        [
-
-        ]
-      ],
-      Monto:[
-        '',
         []
-      ]
+      ],
+      detalleConceptos: this._fb.array([
+        this._fb.group({
+          ConceptoPorDetalle: [null,Validators.required],
+          Monto: ['', Validators.required]
+        })
+      ])
     });
 
 
@@ -87,24 +83,63 @@ export class NuevaComponent implements OnInit {
 
   }
 
-
-  ngOnInit(): void {
-
+  get detalles() {
+    return this.formNuevaSolicitud.get('detalleConceptos') as FormArray;
   }
 
-    onKeyUp() { // appending the updated value to the variable
+  addDetalleConcepto() {
+    this.detalles.push(
+      this._fb.group({
+        ConceptoPorDetalle: [null],
+        Monto: ['']
+      })
+    );
+  }
+
+  deleteDetalleConcepto(i){
+    if(this.detalles.length>1){
+    this.detalles.removeAt(i)
+    }
+    this.onKeyUp();
+  }
+
+  agregarPartidaExtraordinaria(){
+    //agregar
+    this.detalles.clear();
+    this.addDetalleConcepto();
+    this.formNuevaSolicitud.reset({
+
+    }
+
+    );
+  }
+
+  ngOnInit(): void {
+    //Se va a ocupar cuando en un futuro :3
+    /*const contact = localStorage.getItem('');
+    if(contact){
+      const contactJSON = JSON.parse(contact);
+      this.detalles.clear();
+      for(let i=0; i< contactJSON.phones.length; i++){
+        this.addDetalleConcepto();
+      }
+      this.formNuevaSolicitud.setValue(JSON.parse(contact));
+    }*/
+  }
+
+    onKeyUp() {
+
       this.CostoActualLocal = parseInt(this.formNuevaSolicitud.value['CostoActual']);
-      this.sumaMontosPorConcepto = parseInt(this.formNuevaSolicitud.value['Monto']);
+      this.sumaMontosPorConcepto = 0; //reseteo la suma cada que escriban un numero y lo vuelvo a calcular abajo
+
+      for(let detalle of this.detalles.controls)
+      {
+        if(_isNumberValue(parseInt(detalle.value['Monto'])) && parseInt(detalle.value['Monto'])!=undefined)
+        this.sumaMontosPorConcepto+=parseInt(detalle.value['Monto']);
+      }
+
       this.faltanteDetallar = this.CostoActualLocal - this.sumaMontosPorConcepto;
 
-      /*
-      if(_isNumberValue(parseInt(this.formNuevaSolicitud.value['CostoActual'])) && _isNumberValue(parseInt(this.formNuevaSolicitud.value['Monto'])))
-      {
-          this.CostoActualLocal = parseInt(this.formNuevaSolicitud.value['CostoActual']);
-          this.sumaMontosPorConcepto = parseInt(this.formNuevaSolicitud.value['Monto']);
-          this.faltanteDetallar = this.CostoActualLocal - this.sumaMontosPorConcepto;
-      }
-       */
     }
 
 

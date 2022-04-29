@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { InicioModule } from './inicio/inicio.module';
 import { NuevaComponent } from './nueva/nueva.component';
+import { ValidaDirectorVicerrectorComponent } from './valida-director-vicerrector/valida-director-vicerrector.component';
 
 
 const routes: Routes = [
@@ -17,6 +18,10 @@ const routes: Routes = [
   {
     path: 'nuevo',
     component: NuevaComponent
+  },
+  {
+    path:'validaDirectorVicerrector',
+    component: ValidaDirectorVicerrectorComponent
   },
   {
     path: '**',

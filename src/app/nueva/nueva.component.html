@@ -6,18 +6,18 @@ Nueva partida extraordinaria
     <div fxLayout="column">
       <!--Radio buttons----------------------------------->
       <div class="containerIn">
-      <mat-radio-group  fxLayout="row"
-      fxLayoutAlign="space-around center"
-      fxLayout.xs="column"
-      fxLayoutGap.xs="10px"
-      fxLayoutAlign.xs="start"
-      [(ngModel)]="partidaExtraordinariaSeleccionada" [ngModelOptions]="{standalone: true}"
-      >
-      <mat-radio-button *ngFor="let opcion of tipoPartidaExtraordinaria" [value]="opcion">
-        {{opcion}}
-      </mat-radio-button>
-      </mat-radio-group>
-    </div>
+        <mat-radio-group  fxLayout="row"
+        fxLayoutAlign="space-around center"
+        fxLayout.xs="column"
+        fxLayoutGap.xs="10px"
+        fxLayoutAlign.xs="start"
+        [(ngModel)]="partidaExtraordinariaSeleccionada" [ngModelOptions]="{standalone: true}"
+        >
+        <mat-radio-button *ngFor="let opcion of tipoPartidaExtraordinaria" [value]="opcion">
+          {{opcion}}
+        </mat-radio-button>
+        </mat-radio-group>
+      </div>
       <!--Radio buttons----------------------------------->
 
 <!-------------------------------------------------------------------------------------------------------->
@@ -80,82 +80,30 @@ Nueva partida extraordinaria
             <!--Detalle por conceptos-->
             <p *ngIf="partidaExtraordinariaSeleccionada!='Compra general'">Detalle por concepto</p>
             <mat-divider *ngIf="partidaExtraordinariaSeleccionada!='Compra general'"></mat-divider>
-            <div *ngIf="partidaExtraordinariaSeleccionada!='Compra general'" fxLayout="row" fxLayoutGap="20px">
-              <div flexLayout="row" fxLayoutGap="10px" fxFlex="80" fxLayoutAlign="start center">
-                <mat-form-field fxFlex="65" [floatLabel]="'auto'" appearance="fill">
-                  <mat-label>Concepto:</mat-label>
-                  <input formControlName="ConceptoPorDetalle" matInput placeholder="Detalle del concepto" value="">
-                </mat-form-field>
+            <div formArrayName="detalleConceptos">
+              <div *ngFor="let detalle of detalles.controls; let i=index" [formGroupName]="i">
+                <div *ngIf="partidaExtraordinariaSeleccionada!='Compra general'" fxLayout="row" fxLayoutGap="20px">
+                  <div flexLayout="row" fxLayoutGap="10px" fxFlex="80" fxLayoutAlign="start center">
+                    <mat-form-field fxFlex="65" [floatLabel]="'auto'" appearance="fill">
+                      <mat-label>Concepto:</mat-label>
+                      <input formControlName="ConceptoPorDetalle" matInput placeholder="Detalle del concepto">
+                    </mat-form-field>
 
-                <mat-form-field fxFlex="20" [floatLabel]="'auto'" appearance="fill">
-                  <mat-label>Monto:</mat-label>
-                  <input formControlName="Monto" matInput formControlName="Monto" placeholder="Monto" (keyup)="onKeyUp()">
-                </mat-form-field>
-              </div>
-              <div fxLayout="row" fxLayoutGap="5px" fxFlex="20" fxLayoutAlign="space-around center" fxLayout.xs="column">
-                  <button  type="submit" mat-flat-button color="primary">+</button>
-                  <button  type="submit" mat-flat-button color="primary">x</button>
-                  <br>
-              </div>
-            </div>
-<!--
-            <div *ngIf="partidaExtraordinariaSeleccionada!='Compra general'" fxLayout="row" fxLayoutGap="20px">
-              <div flexLayout="row" fxLayoutGap="10px" fxFlex="80" fxLayoutAlign="start center">
-                <mat-form-field fxFlex="65" [floatLabel]="'auto'" appearance="fill">
-                  <mat-label>Concepto:</mat-label>
-                  <input matInput placeholder="Detalle del concepto" value="">
-                </mat-form-field>
+                    <mat-form-field fxFlex="20" [floatLabel]="'auto'" appearance="fill">
+                      <mat-label>Monto:</mat-label>
+                      <input formControlName="Monto" matInput placeholder="Monto" (keyup)="onKeyUp()">
+                    </mat-form-field>
+                  </div>
+                  <div fxLayout="row" fxLayoutGap="5px" fxFlex="20" fxLayoutAlign="space-around center" fxLayout.xs="column">
+                      <button (click)="addDetalleConcepto()" type="button"  mat-flat-button color="primary">+</button>
 
-                <mat-form-field fxFlex="20" [floatLabel]="'auto'" appearance="fill">
-                  <mat-label>Monto:</mat-label>
-                  <input matInput placeholder="Monto" value="">
-                </mat-form-field>
-              </div>
-              <div fxLayout="row" fxLayoutGap="5px" fxFlex="20" fxLayoutAlign="space-around center" fxLayout.xs="column">
-                  <button  type="submit" mat-flat-button color="primary">+</button>
-                  <button  type="submit" mat-flat-button color="primary">x</button>
-                  <br>
+                      <button (click)="deleteDetalleConcepto(i)" type="button" mat-flat-button color="primary">x</button>
+                      <br>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div *ngIf="partidaExtraordinariaSeleccionada!='Compra general'" fxLayout="row" fxLayoutGap="20px">
-              <div flexLayout="row" fxLayoutGap="10px" fxFlex="80" fxLayoutAlign="start center">
-                <mat-form-field fxFlex="65" [floatLabel]="'auto'" appearance="fill">
-                  <mat-label>Concepto:</mat-label>
-                  <input matInput placeholder="Detalle del concepto" value="">
-                </mat-form-field>
-
-                <mat-form-field fxFlex="20" [floatLabel]="'auto'" appearance="fill">
-                  <mat-label>Monto:</mat-label>
-                  <input matInput placeholder="Monto" value="">
-                </mat-form-field>
-              </div>
-              <div fxLayout="row" fxLayoutGap="5px" fxFlex="20" fxLayoutAlign="space-around center" fxLayout.xs="column">
-                  <button  type="submit" mat-flat-button color="primary">+</button>
-                  <button  type="submit" mat-flat-button color="primary">x</button>
-                  <br>
-              </div>
-            </div>
-
-            <div *ngIf="partidaExtraordinariaSeleccionada!='Compra general'" fxLayout="row" fxLayoutGap="20px">
-              <div flexLayout="row" fxLayoutGap="10px" fxFlex="80" fxLayoutAlign="start center">
-                <mat-form-field fxFlex="65" [floatLabel]="'auto'" appearance="fill">
-                  <mat-label>Concepto:</mat-label>
-                  <input matInput placeholder="Detalle del concepto" value="">
-                </mat-form-field>
-
-                <mat-form-field fxFlex="20" [floatLabel]="'auto'" appearance="fill">
-                  <mat-label>Monto:</mat-label>
-                  <input matInput placeholder="Monto" value="">
-                </mat-form-field>
-              </div>
-              <div fxLayout="row" fxLayoutGap="5px" fxFlex="20" fxLayoutAlign="space-around center" fxLayout.xs="column">
-                  <button  type="submit" mat-flat-button color="primary">+</button>
-                  <button type="submit" mat-flat-button color="primary">x</button>
-                  <br>
-              </div>
-            </div>
--->
             <mat-divider *ngIf="partidaExtraordinariaSeleccionada!='Compra general'"></mat-divider>
             <!--Totales-->
             <div *ngIf="partidaExtraordinariaSeleccionada!='Compra general'" fxLayout="row" fxLayoutGap="5px">
