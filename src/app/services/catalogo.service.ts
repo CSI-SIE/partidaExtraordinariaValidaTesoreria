@@ -80,14 +80,35 @@ export class CatalogosService extends ServicioBase {
     return this.consulta(parametros);
   }
 
-  public recuperarQuejasSugerencias(_idTipoAyuda: number, _anio: number, _idEstatus:number): Observable<any[]>{
+  public recuperarValidaDirectorVicerrector(_idPeriodo): Observable<any>{
     const parametros = {
-      accion: 'DEF_Defensoria_ListadoAyuda',
+      accion: 'NOMBRE API',
       servicio: 'catalogo',
-      acciones: 1,
-      idTipoAyuda: _idTipoAyuda,
-      anio: _anio,
-      idestatus: _idEstatus,
+      idPeriodo: _idPeriodo,
+      tipoRespuesta: 'json'
+    };
+    return this.consulta(parametros);
+  }
+
+
+
+  public motivoRechazo(_id: number, _motivo:string): Observable<any>{
+    const parametros = {
+      accion: 'NOMBRE api',
+      servicio: 'catalogo',
+      id: _id,
+      motivo: _motivo,
+
+      tipoRespuesta: 'json'
+    };
+    return this.consulta(parametros);
+  }
+
+  public obtenerSolicitudById(_id:number):Observable<any>{
+    const parametros = {
+      accion: 'NOMBRE API',
+      servicio: 'catalogo',
+      id: _id,
       tipoRespuesta: 'json'
     };
     return this.consulta(parametros);

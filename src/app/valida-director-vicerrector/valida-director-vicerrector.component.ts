@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { Periodo } from 'src/shared/models/periodo.model';
+import { resultadosValidaDirectorVicerrector } from 'src/shared/models/tabla.model';
 import { CatalogosService } from '../services/catalogo.service';
 
 @Component({
@@ -22,13 +23,61 @@ export class ValidaDirectorVicerrectorComponent implements OnInit {
     clickBusqueda = false;
     sinResultados = false;
     //Tabla---------------
-    resultadosPartidasExtraordinarias:any[] = [];
+    resultadosPartidasExtraordinarias:any[] = [
+      {
+        descripcion: 'Esto es una descripción',
+        fechaSolicitud: '2022-05-03',
+        tipoSolicitud: 'compra en general',
+        status: 'Aprobado',
+        fechaAutorizacion: '2022-05-03',
+        recDirAdmin: 'Aprobado',
+        statusDTI: 'Aprobado',
+      },
+      {
+        descripcion: 'Esto es una descripción',
+        fechaSolicitud: '2022-05-03',
+        tipoSolicitud: 'compra en general',
+        status: 'Aprobado',
+        fechaAutorizacion: '2022-05-03',
+        recDirAdmin: 'Aprobado',
+        statusDTI: 'Aprobado',
+      },
+      {
+        descripcion: 'Esto es una descripción',
+        fechaSolicitud: '2022-05-03',
+        tipoSolicitud: 'compra en general',
+        status: 'Aprobado',
+        fechaAutorizacion: '2022-05-03',
+        recDirAdmin: 'Aprobado',
+        statusDTI: 'Aprobado',
+      },
+      {
+        descripcion: 'Esto es una descripción',
+        fechaSolicitud: '2022-05-03',
+        tipoSolicitud: 'compra en general',
+        status: 'Aprobado',
+        fechaAutorizacion: '2022-05-03',
+        recDirAdmin: 'Aprobado',
+        statusDTI: 'Aprobado',
+      },
+      {
+        descripcion: 'Esto es una descripción',
+        fechaSolicitud: '2022-05-03',
+        tipoSolicitud: 'compra en general',
+        status: 'Aprobado',
+        fechaAutorizacion: '2022-05-03',
+        recDirAdmin: 'Aprobado',
+        statusDTI: 'Aprobado',
+      }
+  ];
+
     pageSizeOptions = [5, 10, 20, 30, 40];
     tamanoTabla = "w-sm-90 w-lg-70 w-xl-50";
     //-------------------
-
+    //
     //catalogos
     public catalogoPeriodo: Periodo[];
+    public resultadosValidaDirectorVicerrector: resultadosValidaDirectorVicerrector[];
 
   constructor(private _fb: FormBuilder,
     private _catalogosService: CatalogosService,
@@ -54,9 +103,10 @@ export class ValidaDirectorVicerrectorComponent implements OnInit {
       this.suscripciones.push(observadorValidadorFormulario$);
       this.dcfValidarDirectorVicerrector();
 
+
       //Catálogos
       this.catalogoPeriodo = [];
-
+      this.resultadosValidaDirectorVicerrector = [];
      }
 
      disteClick(){
@@ -66,7 +116,7 @@ export class ValidaDirectorVicerrectorComponent implements OnInit {
     //TABLA-------------------------------
     //Estos nombres cambian respecto a como lo mandan de la consulta
     public displayedColumnsGrupo = {
-      valoresQuejaSugerencia: {
+      columnas: {
         descripcion: ['DESCRIPCION'],
         fechaSolicitud: ['FECHA SOLICITUD'],
         tipoSolicitud: ['TIPO SOLICITUD'],
@@ -112,37 +162,15 @@ export class ValidaDirectorVicerrectorComponent implements OnInit {
 
     this.resultadosPartidasExtraordinarias = []; //Limpio el resultado
 
-    const buscaForm$ = this._catalogosService.guardarValidacion(
-      //this.formularioValidaciones.value['Descripcion']
-    ).subscribe(
+    const buscaForm$ = this._catalogosService.recuperarValidaDirectorVicerrector(99999).subscribe(
       {
         next: (data) =>{
-          this.catalogoPeriodo = data;
+          this.resultadosPartidasExtraordinarias = data;
 
-          let i_posicion: number = 1;
-          for(let item of this.catalogoPeriodo)
-          {
-            if(item.descripcion == '' || item.descripcion == null)
-            {item.descripcion = 'Abierto'}
-       //>>>Me hace falta conocer los tipos de estatus<<<<
-            this.resultadosPartidasExtraordinarias.push({
-              //posicion: i_posicion,
-                /*id:item.id,
-                nombre: item.nombre,
-                apellidos: item.apellidos,
-                correo: item.correo,
-                idIEST: item.idIEST,
-                relacion: item.relacion,
-                ayuda: item.ayuda,
-                comentarios: item.comentarios,
-                estatus: item.estatus*/
-            })
-            i_posicion++;
-          }
           if(this.resultadosPartidasExtraordinarias.length<=0)
           {this.sinResultados = true;}
           else
-          {this.sinResultados=false;}
+          {this.sinResultados = false;}
 
         },
         error: (errores) => {
@@ -153,7 +181,8 @@ export class ValidaDirectorVicerrectorComponent implements OnInit {
           this.showSpinner = false;
         }
       }
-    )
+    );
+    this.suscripciones.push(buscaForm$);
   }
 
   ngOnDestroy() {
@@ -196,11 +225,8 @@ export class ValidaDirectorVicerrectorComponent implements OnInit {
               this.efValidarDirectorVicerrector[campo] += mensajes[clave] + ' ';
             }
           }
-
         }
-
       }
-
     }
   }
 

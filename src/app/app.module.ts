@@ -9,10 +9,10 @@ import { MaterialModule } from 'src/shared/material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 
 
+
 @NgModule({
   declarations: [
-    AppComponent,
-
+    AppComponent
 
   ],
   imports: [

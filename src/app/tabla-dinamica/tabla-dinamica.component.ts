@@ -1,6 +1,9 @@
 import { Component, OnInit, Input, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { resultadosValidaDirectorVicerrector } from 'src/shared/models/tabla.model';
+import { AprobarRechazarComponent } from '../aprobar-rechazar/aprobar-rechazar.component';
 
 @Component({
   selector: 'tabla-dinamica',
@@ -15,14 +18,45 @@ export class TablaDinamicaComponent implements OnInit {
   @Input() pageSizeOptions= [];
   @Input() public displayedColumns;
 
-    //tabla variables
-    @ViewChild(MatTable) table: MatTable<any>;
-    @ViewChild('paginador', {static: false}) paginator: MatPaginator ;
-    dataSource = new MatTableDataSource<any[]>();
-    mostrarPaginador:boolean = false;
-  constructor(public cdRef: ChangeDetectorRef) { }
+  //tabla variables
+  @ViewChild(MatTable) table: MatTable<any>;
+  @ViewChild('paginador', {static: false}) paginator: MatPaginator ;
+  dataSource = new MatTableDataSource<any[]>();
+  mostrarPaginador:boolean = false;
+
+  constructor(public cdRef: ChangeDetectorRef, public dialog: MatDialog) { }
 
   ngOnInit(): void {
+
+  }
+
+  reiniciar(){
+    this.resultadosPartidasExtraordinarias = [];
+  }
+
+  editar(valor: resultadosValidaDirectorVicerrector[]){
+    console.log('Editar listo');
+  }
+
+  ver(valor: resultadosValidaDirectorVicerrector[]){
+    console.log('Ver listo');
+  }
+
+  desplegarDialogo(valor: resultadosValidaDirectorVicerrector[]){
+    let dialogRef = this.dialog.open(AprobarRechazarComponent, {
+      width: '50%',
+      height: '95%',
+      disableClose: true,
+      autoFocus: true,
+
+      data: {valor}
+    });
+
+    //para saber que el botón fue seleccionado
+    dialogRef.afterClosed().subscribe(result =>{
+      console.log(`Resultado: ${result}`);
+
+    })
   }
 
   aplicarFiltro(filterValue){

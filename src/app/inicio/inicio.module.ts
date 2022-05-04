@@ -18,6 +18,7 @@ import { TablaDinamicaComponent } from '../tabla-dinamica/tabla-dinamica.compone
 
 import { ValidaDirectorVicerrectorComponent } from '../valida-director-vicerrector/valida-director-vicerrector.component';
 import { AprobarRechazarComponent } from '../aprobar-rechazar/aprobar-rechazar.component';
+import { RechazarComponent } from '../rechazar/rechazar.component';
 
 
 
@@ -27,7 +28,8 @@ import { AprobarRechazarComponent } from '../aprobar-rechazar/aprobar-rechazar.c
     NuevaComponent,
     TablaDinamicaComponent,
     ValidaDirectorVicerrectorComponent,
-    AprobarRechazarComponent
+    AprobarRechazarComponent,
+   RechazarComponent
   ],
   imports: [
     CommonModule,

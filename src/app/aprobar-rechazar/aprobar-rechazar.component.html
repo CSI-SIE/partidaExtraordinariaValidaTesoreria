@@ -1,1 +1,83 @@
-<h1>Hola</h1>
+<div fxLayout="row" fxLayoutAlign="end center" >
+  <button matTooltip="cerrar" cdkFocusInitial mat-button mat-flat-button mat-dialog-close="false" color="primary">x</button>
+</div>
+
+
+<div class="container">
+<div fxLayout="column" fxLayoutGap="2px">
+  <div fxLayout="column" fxLayoutAlign="center">
+    <p><strong>Tipo de partida: </strong>Compra general</p>
+
+    <mat-divider></mat-divider>
+    <br>
+    <p><strong>Descripción completa del articulo o servicio: </strong></p>
+    <p>Impresora SHARP 266</p>
+
+    <mat-divider></mat-divider>
+    <br>
+    <p><strong>Proveedor:	</strong></p>
+    <p>Mosa solución integral en multifuncional en red</p>
+
+    <mat-divider></mat-divider>
+    <br>
+    <p><strong>Costo actual: </strong>$40,000</p>
+
+    <mat-divider></mat-divider>
+    <br><p><strong>Justificación:	</strong></p>
+    <p>Se ocupa para imprimir más hojas por segundo</p>
+
+
+    <!--<p><strong>Tipo de partida: </strong></p>
+    <p>Compra general</p>
+    <mat-divider></mat-divider>
+    <p><strong>Descripción completa del articulo o servicio: </strong></p>
+    <p>Impresora SHARP 266</p>
+    <mat-divider></mat-divider>
+    <p><strong>Proveedor:	</strong></p>
+    <p>Mosa solución integral en multifuncional en red</p>
+    <mat-divider></mat-divider>
+    <p><strong>Costo actual: </strong></p>
+    <p>$40,000</p>
+    <mat-divider></mat-divider>
+    <p><strong>Justificación:	</strong></p>
+    <p>Se ocupa para imprimir más hojas por segundo</p>-->
+
+    <mat-divider></mat-divider>
+    <br>
+    <p><strong>Archivos de cotización: </strong></p>
+    <button matTooltip="clic para descargar" mat-button mat-Stroked-button  color="primary">
+      Descargar documento(s)
+      <span class="material-icons">
+      attach_file
+      </span>
+    </button>
+
+  </div>
+  <br> <br> <br>
+
+
+  <!--<div fxLayout="column">
+    <mat-divider></mat-divider>
+    <p><strong>Notas: </strong></p>
+    <mat-form-field appearance="fill">
+      <mat-label>Anotación</mat-label>
+      <textarea matInput formControlName="" placeholder=""></textarea>
+    </mat-form-field>
+  </div>-->
+
+
+  <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="35px">
+
+    <button  type="button" matTooltip="Aprobar solicitud" mat-flat-button color="primary"><span class="material-icons">
+      thumb_up
+      </span> Aprobar</button>
+
+    <button (click)="rechazar(data.valor.id)" type="button" mat-dialog-close="true" mat-flat-button color="primary" mat-button matTooltip="Rechazar solicitud">
+      <span class="material-icons">
+      thumb_down
+      </span> Rechazar
+    </button>
+
+  </div>
+</div>
+</div>

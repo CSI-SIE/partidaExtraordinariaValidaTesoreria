@@ -1,0 +1,44 @@
+    <form>
+    <div fxLayout="column">
+
+      <p><strong>Motivo </strong></p>
+      <mat-form-field appearance="fill">
+        <mat-label>Por favor escriba el motivo por el cual lo va a rechazar.</mat-label>
+        <textarea matInput [(ngModel)]="data.motivo" [ngModelOptions]="{standalone: true}" (keyup) ="validacionTextArea()" ></textarea>
+      </mat-form-field>
+    </div>
+
+    <div
+      fxLayout="row"
+      fxLayout.xs="column"
+      fxLayoutAlign="space-around center">
+      <button mat-button [mat-dialog-close]="data.motivo" mat-flat-button [disabled] ="!activo" color="primary">Rechazar</button>
+
+      <button mat-button (click)="onClick()" mat-flat-button color="primary">Cancelar</button>
+    </div>
+    </form>
+
+<!--
+<div fxFlex  fxLayout="column" fxLayoutAlign="center center">
+  <h2>Rechazar</h2>
+  <form  class="example-form">
+
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>Motivo por el cual se va a rechazar.</mat-label>
+        <textarea matInput [(ngModel)]="data.motivo" [ngModelOptions]="{standalone: true}" (keyup) ="validacionTextArea()" ></textarea>
+      </mat-form-field>
+    </div>
+
+    <div
+        fxLayout="row"
+        fxLayout.xs="column"
+        fxLayoutAlign="space-around center">
+        <button mat-button [mat-dialog-close]="data.motivo" mat-flat-button [disabled] ="!activo" color="primary">Rechazar</button>
+
+        <button mat-button (click)="onClick()" mat-flat-button color="primary">Cancelar</button>
+     </div>
+
+  </form>
+</div>
+-->

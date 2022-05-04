@@ -2,7 +2,10 @@ import { _isNumberValue } from '@angular/cdk/coercion';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
-
+import { ActivatedRoute} from '@angular/router'
+import { map } from 'rxjs/operators'
+import { Solicitud } from 'src/shared/models/solicitud.model';
+import { CatalogosService } from '../services/catalogo.service';
 
 @Component({
   selector: 'app-nueva',
@@ -11,6 +14,8 @@ import { Subscription } from 'rxjs';
 })
 export class NuevaComponent implements OnInit {
 
+  public solicitudModel: Solicitud;
+
   private suscripciones: Subscription[];
   public formNuevaSolicitud: FormGroup;
 
@@ -18,16 +23,16 @@ export class NuevaComponent implements OnInit {
   public partidaExtraordinariaSeleccionada: string = 'Compra general';
   public tipoPartidaExtraordinaria:string[]=['Compra general', 'Gastos a comprobar', 'Reembolso', 'Gastos de viajes'];
 
-
-
   public faltanteDetallar:number;
   public sumaMontosPorConcepto:number;
 
   public CostoActualLocal:number;
 
-  constructor(private _fb: FormBuilder) {
+  constructor(private _fb: FormBuilder,
+  public route: ActivatedRoute,
+  private _catalogosService: CatalogosService) {
 
-    this.suscripciones = [];
+  this.suscripciones = [];
 
     //formGroups ----------------------------------------------------
     this.formNuevaSolicitud = this._fb.group({
@@ -115,6 +120,23 @@ export class NuevaComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.route.paramMap.pipe(
+      map(params => Number(params.get('id')))
+    ).subscribe(id =>{
+      const obtenerSolicitud$ = this._catalogosService.obtenerSolicitudById(id).subscribe(
+        {
+          next:(data) => { this.solicitudModel = data; },
+          error: (errores) => {
+            console.error(errores);
+          },
+          complete:() =>{}
+        }
+      );
+      console.log("ID: ",id );
+        this.suscripciones.push(obtenerSolicitud$);
+    });
+
+
     //Se va a ocupar cuando en un futuro :3
     /*const contact = localStorage.getItem('');
     if(contact){
@@ -127,20 +149,25 @@ export class NuevaComponent implements OnInit {
     }*/
   }
 
-    onKeyUp() {
+  obtenerSolicitud(id){
 
-      this.CostoActualLocal = parseInt(this.formNuevaSolicitud.value['CostoActual']);
-      this.sumaMontosPorConcepto = 0; //reseteo la suma cada que escriban un numero y lo vuelvo a calcular abajo
+  }
 
-      for(let detalle of this.detalles.controls)
-      {
-        if(_isNumberValue(parseInt(detalle.value['Monto'])) && parseInt(detalle.value['Monto'])!=undefined)
-        this.sumaMontosPorConcepto+=parseInt(detalle.value['Monto']);
-      }
 
-      this.faltanteDetallar = this.CostoActualLocal - this.sumaMontosPorConcepto;
+  onKeyUp() {
 
-    }
+    this.CostoActualLocal = parseInt(this.formNuevaSolicitud.value['CostoActual']);
+    this.sumaMontosPorConcepto = 0; //reseteo la suma cada que escriban un numero y lo vuelvo a calcular abajo
+
+     for(let detalle of this.detalles.controls)
+     {
+       if(_isNumberValue(parseInt(detalle.value['Monto'])) && parseInt(detalle.value['Monto'])!=undefined)
+       this.sumaMontosPorConcepto+=parseInt(detalle.value['Monto']);
+     }
+
+    this.faltanteDetallar = this.CostoActualLocal - this.sumaMontosPorConcepto;
+
+  }
 
 
   //

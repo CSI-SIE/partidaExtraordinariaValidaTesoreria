@@ -16,7 +16,7 @@ const routes: Routes = [
     loadChildren: () => import('./inicio/inicio.module').then(m => InicioModule)
   },
   {
-    path: 'nuevo',
+    path: 'nuevo/:id',
     component: NuevaComponent
   },
   {
