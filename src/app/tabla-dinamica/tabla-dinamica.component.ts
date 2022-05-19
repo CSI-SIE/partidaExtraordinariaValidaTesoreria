@@ -4,6 +4,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { resultadosValidaDirectorVicerrector } from 'src/shared/models/tabla.model';
 import { AprobarRechazarComponent } from '../aprobar-rechazar/aprobar-rechazar.component';
+import { Router } from '@angular/router';
+import { CatalogosService } from '../services/catalogo.service';
+import { EliminarSolicitudComponent } from '../eliminar-solicitud/eliminar-solicitud.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'tabla-dinamica',
@@ -11,6 +15,8 @@ import { AprobarRechazarComponent } from '../aprobar-rechazar/aprobar-rechazar.c
   styleUrls: ['./tabla-dinamica.component.scss']
 })
 export class TablaDinamicaComponent implements OnInit {
+
+  private suscripciones: Subscription[];
 
   @Input() tipoTabla:number=0;
   @Input() resultadosPartidasExtraordinarias:any [] =[];
@@ -24,7 +30,15 @@ export class TablaDinamicaComponent implements OnInit {
   dataSource = new MatTableDataSource<any[]>();
   mostrarPaginador:boolean = false;
 
-  constructor(public cdRef: ChangeDetectorRef, public dialog: MatDialog) { }
+
+
+  constructor(public cdRef: ChangeDetectorRef,
+    public dialog: MatDialog,
+    public router: Router,
+    private _catalogosService: CatalogosService
+    ) {
+      this.suscripciones = [];
+    }
 
   ngOnInit(): void {
 
@@ -34,11 +48,56 @@ export class TablaDinamicaComponent implements OnInit {
     this.resultadosPartidasExtraordinarias = [];
   }
 
-  editar(valor: resultadosValidaDirectorVicerrector[]){
-    console.log('Editar listo');
+  editar(valor){
+    this.router.navigateByUrl('/editar/' + valor['idRegistro']);
+    console.log('editar');
+    console.log(valor['idRegistro']);
   }
 
-  ver(valor: resultadosValidaDirectorVicerrector[]){
+  eliminar(valor){
+    let motivo: string = '';
+
+    const dialogRef$ = this.dialog.open(EliminarSolicitudComponent, {
+      width: '30%',
+      disableClose: true,
+      autoFocus: true,
+      data: {motivo: ''},
+    });
+
+    dialogRef$.afterClosed().subscribe(result => {
+
+      if(result == undefined)
+      {
+        console.log('Se canceló la eliminación');
+      }
+      else
+      {
+        motivo = result;
+
+        console.log('Se va a eliminar el id: ' + valor['idRegistro']);
+
+        const eliminarSolicitud$ = this._catalogosService.eliminarPartidaExtraOrdinaria(valor['idRegistro']).subscribe(
+          {
+            next: () => {
+              //Entra al servicio de catalogos y en recargarTabla le envía un 1
+              //con este le estamos diciendo que recargue la tabla.
+              this._catalogosService.recargarTabla.next(1);
+            },
+            error: (errores) => {
+              console.error(errores);
+            },
+            complete: ()  => {
+              //No hago nada aún aquí
+            }
+
+          }
+        );
+        this.suscripciones.push(eliminarSolicitud$);
+      }
+    });
+  }
+
+  ver(valor){
     console.log('Ver listo');
   }
 

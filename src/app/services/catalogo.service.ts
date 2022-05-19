@@ -3,11 +3,6 @@ import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 
 import { ServicioBase } from './servicio-base.service';
-//import { TipoAyuda } from '../shared/models/tipo-ayuda.model';
-//import { QuejaSugerencia } from '../shared/models/queja-sujerencia.model';
-//import { CatalogoAnioSolicitudes } from '../shared/models/catalogo-anio.model';
-//import { CorreoNuevoSeguimiento } from '../shared/models/correo-nuevo-seguimiento.model';
-//import { Carrera } from '../shared/models/carrera.model';
 
 //----------------------------------
 @Injectable({
@@ -25,27 +20,126 @@ export class CatalogosService extends ServicioBase {
   public recargarTabla$ = this.recargarTabla.asObservable();
 
   //Agregar nueva solicitud--------
-  public guardarFormulario(_Nombre: string, _Apellido: string, _CorreoElectronico: string,
-    _IdIEST: number, _Licenciatura: number, _TipoAyuda: number, _Comentarios: string ): Observable<any>{
+  public guardarNuevaSolicitudPartidaExtraordinaria( _descripcion:string, _proveedor:string, _justificacion: string, _costo: number,  _equipo: number, _detalle: string): Observable<any>{
     const parametros = {
-      servicio: 'catalogo',
-      accion: 'DEF_Defensoria_Registrar',
-      acciones: 1,
-      nombre: _Nombre.trim(),
-      apellidos: _Apellido.trim(),
-      correo: _CorreoElectronico.trim(),
-      idIEST: _IdIEST,
-      idTronco: _Licenciatura,
-      idTipoAyuda: _TipoAyuda,
-      comentarios: _Comentarios.trim(),
+      servicio: 'administrativo',
+      accion: 'registroPartidaExtraordinaria',
+      idAccion: 1, //1) Guarda Nueva Partida - 2) Listado de solicitudes por persona - 3) Obtiene información de una partida - 4) Obtiene listado de los conceptos - 5) Edita la partida - 6) Elimina Partida
+      idPartida: 0,
+      idUnidad: 0,
+      idUnidadArea: 0,
+      idPersonCaptura: 23269,
+      tipo: 2,
+      descripcion: _descripcion,
+      proveedor: _proveedor,
+      costo: 500,
+      justificacion: _justificacion,
+      detalle: _detalle,
+      periodo: 96,
+      equipo: 0,
 
       tipoRespuesta: 'json'
 
     };
     return this.consulta(parametros);
   }
-  //--------
+  //Concepto1|5$Concepto2|6
+  //Concepto1|50$Concepto2|100$Concepto3|350
+  //exec  Pre_Captura_PartidaExtraordinaria 1, 0, 0, 0, 'descripcion', 'proveedor', 1, 'Justificacion', 1, 23269, '|', 96, 0
+  //exec  Pre_Captura_PartidaExtraordinaria 1, 0, 0, 0, 'Descripcion', 'Proveedor', 500, 'Justificacion', 1, 23269, '|', 96, 0
 
+  public obtenerListadoSolicitudesPorPersona():Observable<any>{
+    const parametros = {
+      servicio: 'administrativo',
+      accion: 'registroPartidaExtraordinaria',
+      idAccion: 2, // 2) Listado de solicitudes por persona
+      idPartida: 0,
+      idUnidad: 0,
+      idUnidadArea: 0,
+      idPersonCaptura: 23269,
+      tipo: 1, //tipoPartida
+      descripcion: '',
+      proveedor: '',
+      costo: 500,
+      justificacion: '',
+      detalle: '',
+      periodo: 96,
+      equipo: 0,
+
+      tipoRespuesta: 'json'
+    };
+    return this.consulta(parametros);
+  }
+
+  public obtenerSolicitudById(_id:number):Observable<any>{
+    const parametros = {
+      servicio: 'administrativo',
+      accion: 'registroPartidaExtraordinaria',
+      idAccion: 3, // 3) Obtiene información de una partida
+      idPartida: _id,
+      idUnidad: 0,
+      idUnidadArea: 0,
+      idPersonCaptura: 23269,
+      tipo: 1,
+      descripcion: '',
+      proveedor: '',
+      costo: 500,
+      justificacion: '',
+      detalle: '',
+      periodo: 96,
+      equipo: 0,
+
+      tipoRespuesta: 'json'
+    };
+    return this.consulta(parametros);
+  }
+
+  public obtenerListadoConceptosById(_id:number):Observable<any>{
+    const parametros = {
+      servicio: 'administrativo',
+      accion: 'registroPartidaExtraordinaria',
+      idAccion: 4, //4) Obtiene listado de los conceptos
+      idPartida: _id,
+      idUnidad: 0,
+      idUnidadArea: 0,
+      idPersonCaptura: 23269,
+      tipo: 1,
+      descripcion: '',
+      proveedor: '',
+      costo: 500,
+      justificacion: '',
+      detalle: '',
+      periodo: 96,
+      equipo: 0,
+
+      tipoRespuesta: 'json'
+    };
+    return this.consulta(parametros);
+  }
+
+  public eliminarPartidaExtraOrdinaria(_id:number):Observable<any>{
+    const parametros = {
+      servicio: 'administrativo',
+      accion: 'registroPartidaExtraordinaria',
+      idAccion: 6, // 6) Eliminar partida
+      idPartida: _id,
+      idUnidad: 0,
+      idUnidadArea: 0,
+      idPersonCaptura: 23269,
+      tipo: 0, //tipoPartida
+      descripcion: '',
+      proveedor: '',
+      costo: 0,
+      justificacion: '',
+      detalle: '',
+      periodo: 96,
+      equipo: 0,
+
+      tipoRespuesta: 'json'
+    };
+    return this.consulta(parametros);
+  }
+  //-----------------------------------------------------------------------------------------------------------------------------------------
   public guardarValidacion(): Observable<any>{
     const parametros = {
       servicio: 'catalogo',
@@ -104,15 +198,7 @@ export class CatalogosService extends ServicioBase {
     return this.consulta(parametros);
   }
 
-  public obtenerSolicitudById(_id:number):Observable<any>{
-    const parametros = {
-      accion: 'NOMBRE API',
-      servicio: 'catalogo',
-      id: _id,
-      tipoRespuesta: 'json'
-    };
-    return this.consulta(parametros);
-  }
+
 
 
 

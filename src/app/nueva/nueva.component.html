@@ -35,7 +35,7 @@ Nueva partida extraordinaria
 
         <mat-divider></mat-divider>
         <br>
-        <form [formGroup]="formNuevaSolicitud">
+        <form [formGroup]="formNuevaSolicitud" (ngSubmit)="onSubmit()">
 
         <!--Contenedor interno completo-->
         <div fxLayout="row" fxLayoutGap="20px" fxLayout.xs="column">
@@ -44,12 +44,12 @@ Nueva partida extraordinaria
 
             <mat-form-field appearance="fill">
               <mat-label>Descripción completa del articulo o servicio:</mat-label>
-              <textarea matInput formControlName="Descripcion" placeholder="Descripción completa del articulo o servicio"></textarea>
+              <textarea  matInput formControlName="Descripcion" placeholder="Descripción completa del articulo o servicio"></textarea>
             </mat-form-field>
 
             <mat-form-field appearance="fill">
               <mat-label>Proveedor:</mat-label>
-              <input matInput formControlName="Proveedor" placeholder="Ingresa un proveedor" value="">
+              <input  matInput formControlName="Proveedor" placeholder="Ingresa un proveedor" value="">
             </mat-form-field>
 
             <mat-form-field appearance="fill">
@@ -63,7 +63,21 @@ Nueva partida extraordinaria
             Es equipo de computo
             </mat-checkbox>
 
+            <div class="progress">
+
+              <mat-progress-bar class="progress-bar" mode="determinate"
+                                [value]="uploadProgress" *ngIf="uploadProgress">
+
+              </mat-progress-bar>
+
+              <mat-icon class="cancel-upload" (click)="cancelUpload()"
+                        *ngIf="uploadProgress">delete_forever</mat-icon>
+
+            </div>
+
           </div>
+
+
 
 
           <!--Columna de la derecha-->
@@ -123,7 +137,7 @@ Nueva partida extraordinaria
 
         <div  fxLayout="column">
           <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="center center" fxLayout.xs="column">
-            <button type="submit" mat-flat-button color="primary">Guardar</button>
+            <button type="submit" mat-flat-button color="primary">Guardar</button> <!--[disabled]="idRegistroGlobal>0"-->
             <button [routerLink]="['/inicio']"  type="submit" mat-flat-button color="primary">Cancelar</button>
             <br>
         </div>

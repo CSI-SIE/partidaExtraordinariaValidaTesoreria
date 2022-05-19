@@ -16,6 +16,8 @@ import { MatSnackBarModule} from '@angular/material/snack-bar';
 import { MatCheckboxModule} from '@angular/material/checkbox';
 import { MatDividerModule} from '@angular/material/divider';
 import {MatIconModule} from '@angular/material/icon';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+
 
 @NgModule({
   imports: [
@@ -35,7 +37,8 @@ import {MatIconModule} from '@angular/material/icon';
     MatSnackBarModule,
     MatCheckboxModule,
     MatDividerModule,
-    MatIconModule
+    MatIconModule,
+    MatProgressBarModule
   ],
   exports: [
     MatFormFieldModule,
@@ -54,7 +57,8 @@ import {MatIconModule} from '@angular/material/icon';
     MatSnackBarModule,
     MatCheckboxModule,
     MatDividerModule,
-    MatIconModule
+    MatIconModule,
+    MatProgressBarModule
   ],
   declarations: [
 

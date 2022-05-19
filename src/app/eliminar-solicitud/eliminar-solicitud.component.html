@@ -1,0 +1,26 @@
+<div fxFlex  fxLayout="column" fxLayoutAlign="center center">
+  <div fxFlex fxLayout="column">
+    <p>¿Realmente desea eliminar la partida extraordinaria seleccionada?</p>
+  </div>
+  <form  class="example-form">
+
+
+     <!-- <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Motivo por el cual se va a eliminar.</mat-label>
+        <textarea matInput [(ngModel)]="data.motivo" [ngModelOptions]="{standalone: true}" placeholder="" (keyup) ="validacionTextArea()" ></textarea>
+      </mat-form-field>-->
+
+      <div
+        fxLayout="row"
+        fxLayout.xs="column"
+        fxLayoutAlign="space-around center"
+        fxLayoutGap="15">
+        <button mat-button [mat-dialog-close]="data.motivo" mat-flat-button color="primary"><span class="material-icons">
+          delete
+          </span> Eliminar</button>
+        <!--<button mat-button (click)="onYesClick()" mat-flat-button [mat-dialog-close]="data.motivo" color="primary">Eliminar</button>-->
+        <button mat-button (click)="onClick()" mat-flat-button color="primary">Cancelar</button>
+      </div>
+
+  </form>
+</div>

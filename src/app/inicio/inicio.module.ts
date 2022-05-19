@@ -19,6 +19,7 @@ import { TablaDinamicaComponent } from '../tabla-dinamica/tabla-dinamica.compone
 import { ValidaDirectorVicerrectorComponent } from '../valida-director-vicerrector/valida-director-vicerrector.component';
 import { AprobarRechazarComponent } from '../aprobar-rechazar/aprobar-rechazar.component';
 import { RechazarComponent } from '../rechazar/rechazar.component';
+import { EliminarSolicitudComponent } from '../eliminar-solicitud/eliminar-solicitud.component';
 
 
 
@@ -29,7 +30,8 @@ import { RechazarComponent } from '../rechazar/rechazar.component';
     TablaDinamicaComponent,
     ValidaDirectorVicerrectorComponent,
     AprobarRechazarComponent,
-   RechazarComponent
+    RechazarComponent,
+    EliminarSolicitudComponent
   ],
   imports: [
     CommonModule,
