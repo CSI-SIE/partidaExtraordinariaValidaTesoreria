@@ -1,0 +1,79 @@
+<div fxLayout="row" fxLayoutAlign="end center">
+  <button matTooltip="cerrar" cdkFocusInitial mat-button mat-flat-button mat-dialog-close="false" color="primary">
+    <span class="material-icons">
+    close
+    </span></button>
+</div>
+
+<div class="container">
+  <div fxLayout="column">
+    <!--Radio buttons----------------------------------->
+    <div class="containerIn">
+      <p><strong>Tipo de partida: </strong>{{this.data.valor.nombrePartida}}</p>
+    </div>
+    <!--Radio buttons----------------------------------->
+
+<!-------------------------------------------------------------------------------------------------------->
+    <div class="containerIn">
+
+      <mat-divider></mat-divider>
+      <br>
+
+
+      <!--Contenedor interno completo-->
+      <div fxLayout="row" fxLayoutGap="20px" fxLayout.xs="column">
+        <!--Columna de la izquierda-->
+        <div fxLayout="column" fxFlex="50">
+
+          <p><strong>Descripción: </strong>{{this.data.valor.descripcion}}</p>
+
+          <p><strong>Proveedor: </strong>{{this.data.valor.proveedor}}</p>
+
+          <p><strong>Justificación: </strong>{{this.data.valor.justificacion}}</p>
+
+          <p><strong>¿Es equipo de computo? </strong>{{this.data.valor.equipoComputo ==1 ? 'si' : 'no'}}</p>
+
+        </div>
+
+
+        <!--Columna de la derecha-->
+        <div fxLayout="column" fxFlex="40">
+          <div fxLayout="column">
+            <p><strong>Costo total: </strong>{{this.data.valor.costo}}</p>
+          </div>
+          <mat-divider></mat-divider>
+          <!--Detalle por conceptos-->
+          <br>
+          <p>Detalle por concepto</p>
+
+          <!--Meter en un ciclo para desglosar cada concepto-->
+          <div fxLayout="row">
+            <div fxLayout="column">
+              <br>
+              <p><strong>Concepto: </strong>Gabinete HP</p>
+              <p><strong>Monto: </strong> $ 600</p>
+
+              <br>
+              <p><strong>Concepto: </strong>kit de teclado con Mouse</p>
+              <p><strong>Monto: </strong>$ 600</p>
+
+              <br>
+              <p><strong>Concepto: </strong>Monitor HP</p>
+              <p><strong>Monto: </strong>$ 3600</p>
+            </div>
+
+          </div>
+
+
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+
+</div>
+

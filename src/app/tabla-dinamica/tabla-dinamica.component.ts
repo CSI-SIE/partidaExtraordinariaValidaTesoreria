@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { CatalogosService } from '../services/catalogo.service';
 import { EliminarSolicitudComponent } from '../eliminar-solicitud/eliminar-solicitud.component';
 import { Subscription } from 'rxjs';
+import { DetallePartidaComponent } from '../detalle-partida/detalle-partida.component';
+import { Solicitud } from 'src/shared/models/solicitud.model';
 
 @Component({
   selector: 'tabla-dinamica',
@@ -19,7 +21,7 @@ export class TablaDinamicaComponent implements OnInit {
   private suscripciones: Subscription[];
 
   @Input() tipoTabla:number=0;
-  @Input() resultadosPartidasExtraordinarias:any [] =[];
+  @Input() resultadosPartidasExtraordinarias:any;
   @Input() tamanoTabla: string = '';
   @Input() pageSizeOptions= [];
   @Input() public displayedColumns;
@@ -82,12 +84,14 @@ export class TablaDinamicaComponent implements OnInit {
               //Entra al servicio de catalogos y en recargarTabla le envía un 1
               //con este le estamos diciendo que recargue la tabla.
               this._catalogosService.recargarTabla.next(1);
+
+              //this.addData();
             },
             error: (errores) => {
               console.error(errores);
             },
             complete: ()  => {
-              //No hago nada aún aquí
+
             }
 
           }
@@ -97,8 +101,16 @@ export class TablaDinamicaComponent implements OnInit {
     });
   }
 
-  ver(valor){
-    console.log('Ver listo');
+  verDetalle(valor){
+    let dialogRef = this.dialog.open(DetallePartidaComponent,{
+      width: '80%',
+      height: '70%',
+      disableClose: true,
+      autoFocus: true,
+
+      data: {valor}
+    });
+
   }
 
   desplegarDialogo(valor: resultadosValidaDirectorVicerrector[]){
@@ -125,7 +137,9 @@ export class TablaDinamicaComponent implements OnInit {
   addData() {
     this.cdRef.detectChanges();
     //seteo los datos de la tabla despues de cargarse la vista y detecto los cambios
-    this.dataSource = new MatTableDataSource<any[]>(this.resultadosPartidasExtraordinarias);
+    //console.log(this.resultadosPartidasExtraordinarias);
+    //this.dataSource.data = this.resultadosPartidasExtraordinarias;
+    this.dataSource = new MatTableDataSource<Solicitud[]>(this.resultadosPartidasExtraordinarias);
     this.cdRef.detectChanges();
 
     //luego renderiso la tabla para motrar el valor nuevo
@@ -137,6 +151,24 @@ export class TablaDinamicaComponent implements OnInit {
 
 ngAfterViewInit(): void {
   this.addData();
+}
+
+ngOnChanges(changes: SimpleChanges) {
+  //2022-05-20 para ver que al cargar por primera vez la tabla se recargue para mostrar los resultados.
+  let change = changes['resultadosPartidasExtraordinarias'];
+  if(!change.firstChange){
+    this.addData();
+  }
+  /*for (let propName in changes) {
+    let change = changes[propName];
+    let curVal  = JSON.stringify(change.currentValue);
+    let prevVal = JSON.stringify(change.previousValue);
+
+          console.log(curVal);
+          console.log(prevVal);
+       }*/
+
+  console.log(changes);
 }
 
 }

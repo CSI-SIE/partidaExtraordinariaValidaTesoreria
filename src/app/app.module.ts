@@ -8,7 +8,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from 'src/shared/material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 
-
 @NgModule({
   declarations: [
     AppComponent
@@ -20,8 +19,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     HttpClientModule,
     MaterialModule,
     FlexLayoutModule,
-    ReactiveFormsModule,
-
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

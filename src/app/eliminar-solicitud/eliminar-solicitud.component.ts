@@ -16,19 +16,6 @@ export class EliminarSolicitudComponent implements OnInit {
 
   public activo = false;
 
-  validacionTextArea(){
-
-    console.log(this.data.motivo);
-
-    if(this.data.motivo.length <=0)
-    {
-      this.activo = false;
-    }
-    else
-    {
-      this.activo = true;
-    }
-  }
   onClick(): void {
     //this.data.motivo = 'noElimnar';
     this.dialogRef.close();

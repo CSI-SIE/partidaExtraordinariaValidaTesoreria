@@ -40,6 +40,18 @@ $capturaPartidaExtraordinaria-theme: mat.define-light-theme((
 /*html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }*/
 
+
+//Tablas-----------------------------------------------------------------------------------------
+/*.mat-header-cell {
+  text-align: left !important;
+}
+
+.mat-cell {
+  text-align: left !important;
+}*/
+//Tablas-----------------------------------------------------------------------------------------
+
+
 .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle , .mat-radio-outer-circle {
   border-color: #ff5900 !important;
 }

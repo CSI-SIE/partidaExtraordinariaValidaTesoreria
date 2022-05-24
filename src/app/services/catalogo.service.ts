@@ -20,7 +20,7 @@ export class CatalogosService extends ServicioBase {
   public recargarTabla$ = this.recargarTabla.asObservable();
 
   //Agregar nueva solicitud--------
-  public guardarNuevaSolicitudPartidaExtraordinaria( _descripcion:string, _proveedor:string, _justificacion: string, _costo: number,  _equipo: number, _detalle: string): Observable<any>{
+  public guardarNuevaSolicitudPartidaExtraordinaria(_tipo:number, _descripcion:string, _proveedor:string, _justificacion: string, _costo: number,  _equipo: number, _detalle: string): Observable<any>{
     const parametros = {
       servicio: 'administrativo',
       accion: 'registroPartidaExtraordinaria',
@@ -29,14 +29,14 @@ export class CatalogosService extends ServicioBase {
       idUnidad: 0,
       idUnidadArea: 0,
       idPersonCaptura: 23269,
-      tipo: 2,
+      tipo: _tipo,
       descripcion: _descripcion,
       proveedor: _proveedor,
-      costo: 500,
+      costo: _costo,
       justificacion: _justificacion,
       detalle: _detalle,
       periodo: 96,
-      equipo: 0,
+      equipo: _equipo,
 
       tipoRespuesta: 'json'
 
@@ -103,16 +103,40 @@ export class CatalogosService extends ServicioBase {
       idUnidad: 0,
       idUnidadArea: 0,
       idPersonCaptura: 23269,
-      tipo: 1,
+      tipo: 0,
       descripcion: '',
       proveedor: '',
-      costo: 500,
+      costo: 0,
       justificacion: '',
       detalle: '',
       periodo: 96,
       equipo: 0,
 
       tipoRespuesta: 'json'
+    };
+    return this.consulta(parametros);
+  }
+
+  public ModificarSolicitudPartidaExtraordinaria(_tipo:number, _descripcion:string, _proveedor:string, _justificacion: string, _costo: number,  _equipo: number, _detalle: string, _idPartida:number): Observable<any>{
+    const parametros = {
+      servicio: 'administrativo',
+      accion: 'registroPartidaExtraordinaria',
+      idAccion: 5, //1) Guarda Nueva Partida - 2) Listado de solicitudes por persona - 3) Obtiene información de una partida - 4) Obtiene listado de los conceptos - 5) Edita la partida - 6) Elimina Partida
+      idPartida: _idPartida,
+      idUnidad: 0,
+      idUnidadArea: 0,
+      idPersonCaptura: 23269,
+      tipo: _tipo,
+      descripcion: _descripcion,
+      proveedor: _proveedor,
+      costo: _costo,
+      justificacion: _justificacion,
+      detalle: _detalle,
+      periodo: 96,
+      equipo: _equipo,
+
+      tipoRespuesta: 'json'
+
     };
     return this.consulta(parametros);
   }

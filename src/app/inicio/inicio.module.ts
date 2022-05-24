@@ -20,6 +20,7 @@ import { ValidaDirectorVicerrectorComponent } from '../valida-director-vicerrect
 import { AprobarRechazarComponent } from '../aprobar-rechazar/aprobar-rechazar.component';
 import { RechazarComponent } from '../rechazar/rechazar.component';
 import { EliminarSolicitudComponent } from '../eliminar-solicitud/eliminar-solicitud.component';
+import { DetallePartidaComponent } from '../detalle-partida/detalle-partida.component';
 
 
 
@@ -31,7 +32,8 @@ import { EliminarSolicitudComponent } from '../eliminar-solicitud/eliminar-solic
     ValidaDirectorVicerrectorComponent,
     AprobarRechazarComponent,
     RechazarComponent,
-    EliminarSolicitudComponent
+    EliminarSolicitudComponent,
+    DetallePartidaComponent
   ],
   imports: [
     CommonModule,
