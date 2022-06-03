@@ -3,6 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { InicioModule } from './inicio/inicio.module';
 import { NuevaComponent } from './nueva/nueva.component';
 import { ValidaDirectorVicerrectorComponent } from './valida-director-vicerrector/valida-director-vicerrector.component';
+import { ValidaDTIComponent } from './valida-dti/valida-dti.component';
+import { ValidaRectorAdministrativoComponent } from './valida-rector-administrativo/valida-rector-administrativo.component';
+import { ValidaTesoreriaComponent } from './valida-tesoreria/valida-tesoreria.component';
 
 
 const routes: Routes = [
@@ -26,6 +29,18 @@ const routes: Routes = [
   {
     path:'validaDirectorVicerrector',
     component: ValidaDirectorVicerrectorComponent
+  },
+  {
+    path:'validaDTI',
+    component: ValidaDTIComponent
+  },
+  {
+    path:'validaRectorAdministrativo',
+    component: ValidaRectorAdministrativoComponent
+  },
+  {
+    path: 'validaTesoreria',
+    component: ValidaTesoreriaComponent
   },
   {
     path: '**',

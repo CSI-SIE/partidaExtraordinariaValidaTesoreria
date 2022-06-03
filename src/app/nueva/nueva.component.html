@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-Nueva partida extraordinaria
+{{nuevaEditar}} partida extraordinaria
 </mat-toolbar>
 
 <div class="container">
@@ -65,7 +65,7 @@ Nueva partida extraordinaria
             Es equipo de computo
             </mat-checkbox>
 
-
+            <subir-archivo #archivo (filePdf)="getFile($event)"></subir-archivo>
 
           </div>
 

@@ -1,0 +1,25 @@
+<div class="container-fluid justify-content-center d-block my-2 mb-3">
+  <div class="container-fluid row justify-content-center d-flex">
+      <div class="cajaarchivo">
+          <div class="input-group">
+              <!-- Inicio input file customizado -->
+
+              <div class="file-upload-wrapper" id="nombreArchivo" data-text="Seleccione archivo .pdf">
+                  <!-- no permitia subir el mismo archivo, se arreglo reiniciando y poniendo en null el input -->
+                  <input (change)="uploadFile($event)" (click)="$event" type="file" class="file-upload-field" type="file" #csvReader name="Upload pdf" id="txtFileUpload" accept=".pdf">
+                  <!--<input (change)="uploadFile($event)" (click)="$event.target.value=null" type="file" class="file-upload-field" type="file" #csvReader name="Upload pdf" id="txtFileUpload" accept=".pdf">-->
+              </div>
+
+              <!-- Fin input file customizado -->
+          </div>
+      </div>
+
+  </div>
+
+</div>
+
+<progress-bar [progress]="progress" *ngIf="mostrarProgress"></progress-bar>
+
+<div class="alert alert-danger" role="alert" *ngIf="errorArchivo">
+  {{mensajeError}}
+</div>

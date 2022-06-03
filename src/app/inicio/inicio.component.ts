@@ -17,6 +17,10 @@ export class InicioComponent implements OnInit {
   private suscripciones: Subscription[];
   private finalizaSubscripcionrecargarTabla: Subscription = null;
 
+  public filtro: string = '';
+  public tipoPartidaExtraordinaria:string[]=['Compra general', 'Gastos a comprobar', 'Reembolso', 'Gastos de viajes'];
+
+
   //Tabla---------------
   /*resultadosPartidasExtraordinarias:any[] = [
     {
@@ -76,7 +80,7 @@ export class InicioComponent implements OnInit {
     }
   ];*/
 
-  pageSizeOptions = [5, 10, 20, 30, 40];
+  pageSizeOptions = [10, 20, 30, 40];
   tamanoTabla = "w-sm-90 w-lg-70 w-xl-50";
   resultadosPartidasExtraordinarias:Solicitud[] = [];
   //-------------------
@@ -85,6 +89,7 @@ export class InicioComponent implements OnInit {
     public dialog: MatDialog) {
     this.resultadosPartidasExtraordinarias = [];
     this.suscripciones = [];
+
   }
 
   //TABLA-------------------------------
@@ -96,10 +101,10 @@ export class InicioComponent implements OnInit {
       costo: ['COSTO'],
       fechaSolicitud: ['FECHA SOLICITUD'],//<<<<<<<<
       tipoPartida: ['TIPO SOLICITUD'], //<<<<<<<<
-      validaDirectorVicerrector: ['DIRECTOR / VICERRECTOR'], //<<<<<<<<
-      validaRectorDirAdmin: ['RECTOR / DIR. ADMINISTRATIVO'], //<<<<<<<<
-      validaDTI: ['STATUS DTI'], //<<<<<<<<
-      aplicada: ['STATUS COMPRAS'],//<<<<<<<<
+      validaDirectorVicerrector: ['ESTATUS DIR. / VICERRECTOR'], //<<<<<<<<
+      validaRectorDirAdmin: ['ESTATUS RECTOR / DIR. ADMINISTRATIVO'], //<<<<<<<<
+      validaDTI: ['ESTATUS DTI'], //<<<<<<<<
+      aplicada: ['ESTATUS COMPRAS'],//<<<<<<<<
       editar: [''],
       paraMostrar: ['idRegistro','descripcion','costo','fechaSolicitud','tipoPartida', 'validaDirectorVicerrector','validaRectorDirAdmin','validaDTI', 'aplicada',  'editar']
     }
@@ -112,7 +117,9 @@ export class InicioComponent implements OnInit {
   this.onSubmit();
 
   }
-
+  aplicarFiltro(param){
+    this.filtro = param;
+  }
   operacionOnSub(): void{}
 
   onSubmit(){
@@ -138,11 +145,11 @@ export class InicioComponent implements OnInit {
                 element['tipoPartida'] = 'Gastos de viajes';
                 break;
               default:
-                element['tipoPartida'] = 'Sin tipo solicitud'
+                element['tipoPartida'] = ''
                 break;
             }
             //------------------------------------------------
-            if(element['costo']){
+            /*if(element['costo']){
 
               const formatterPeso = new Intl.NumberFormat('en-US', {
                 style: 'currency',
@@ -150,11 +157,11 @@ export class InicioComponent implements OnInit {
                 minimumFractionDigits: 2
               })
               element['costo'] = formatterPeso.format(element['costo']);
-            }
+            }*/
 
-            //console.log(element['idRegistro']);
+
           });
-
+          console.log(data);
           this.resultadosPartidasExtraordinarias = data;
 
 

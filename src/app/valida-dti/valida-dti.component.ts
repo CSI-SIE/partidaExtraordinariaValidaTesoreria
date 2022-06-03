@@ -3,15 +3,14 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { Periodo } from 'src/shared/models/periodo.model';
-import { resultadosValidaDirectorVicerrector } from 'src/shared/models/tabla.model';
 import { ValidaRechazaService } from '../services/validaRechaza.service';
 
 @Component({
-  selector: 'valida-director-vicerrector',
-  templateUrl: './valida-director-vicerrector.component.html',
-  styleUrls: ['./valida-director-vicerrector.component.scss']
+  selector: 'valida-dti',
+  templateUrl: './valida-dti.component.html',
+  styleUrls: ['./valida-dti.component.scss']
 })
-export class ValidaDirectorVicerrectorComponent implements OnInit {
+export class ValidaDTIComponent implements OnInit {
 
   public filtro: string = '';
   public tipoPartidaExtraordinaria:any[]=[
@@ -22,11 +21,8 @@ export class ValidaDirectorVicerrectorComponent implements OnInit {
   ];
 
   private finalizaSubscripcionrecargarTabla: Subscription = null;
-
   private suscripciones: Subscription[];
-
   public formularioValidaciones: FormGroup;
-
   showSpinner = false;
   clickBusqueda = false;
   sinResultados = false;
@@ -39,7 +35,7 @@ export class ValidaDirectorVicerrectorComponent implements OnInit {
   //
   //catalogos
   public catalogoPeriodo: Periodo[];
-  public resultadosValidaDirectorVicerrector: resultadosValidaDirectorVicerrector[];
+  public resultadosValidaDTI:any[];
 
   //TABLA-------------------------------
   //Estos nombres cambian respecto a como lo mandan de la consulta
@@ -48,12 +44,11 @@ export class ValidaDirectorVicerrectorComponent implements OnInit {
       descripcion: ['DESCRIPCION'],
       fechaSolicitud: ['FECHA SOLICITUD'],
       tipoPartida: ['TIPO SOLICITUD'],
-      validaDirectorVicerrector: ['ESTATUS DIR. / VICERRECTOR'],
-      fechaAutorizacion: ['FECHA REVISION DIR. / VICERRECTOR'],
-      validaRectorDirAdmin: ['ESTATUS RECTOR / DIR. ADMINISTRATIVO'],
       validaDTI: ['ESTATUS DTI'],
-      verDirVic: [''],
-      paraMostrar: ['descripcion','fechaSolicitud','tipoPartida', 'validaDirectorVicerrector','fechaAutorizacion','validaRectorDirAdmin', 'validaDTI',  'verDirVic']
+      fechaAutorizacionDTI: ['FECHA REVISION DTI'],
+      validaRectorDirAdmin: ['ESTATUS RECTOR / DIR. ADMINISTRAIVO'],
+      verDTI: [''],
+      paraMostrar: ['descripcion','fechaSolicitud','tipoPartida', 'validaDTI','fechaAutorizacionDTI', 'validaRectorDirAdmin',  'verDTI']
     }
 
     };
@@ -76,24 +71,23 @@ export class ValidaDirectorVicerrectorComponent implements OnInit {
       const observadorValidadorFormulario$ =
       this.formularioValidaciones.valueChanges.subscribe(
         (datos) =>{
-          this.dcfValidarDirectorVicerrector(datos);
+          this.dcfValidaDTI(datos);
         }
       );
 
       this.suscripciones.push(observadorValidadorFormulario$);
-      this.dcfValidarDirectorVicerrector();
+      this.dcfValidaDTI();
 
 
       //Catálogos
       this.catalogoPeriodo = [];
-      this.resultadosValidaDirectorVicerrector = [];
+      this.resultadosValidaDTI = [];
+
     }
 
   disteClick(){
     this.clickBusqueda = true;
   }
-
-
 
   ngOnInit(): void {
     //Recarga la tabla siempre y cuando la respuesta en el servicio this._catalogoSevice
@@ -101,41 +95,32 @@ export class ValidaDirectorVicerrectorComponent implements OnInit {
     this.finalizaSubscripcionrecargarTabla = this._validaRechazaService.recargarTabla$.subscribe((resp)=>{
       if(resp == 1){this.onSubmit();} });
 
-    //Para el catalogo de Periodos
-    /*const recuperarPeriodos$ = this._validaRechazaService.recuperaPeriodos().subscribe(
-      {
-        next: (result) =>{
+      //======================================
+      //Aquí va a ir el catálogo de Periodos
+      //======================================
 
-
-          this.catalogoPeriodo = result;
-        },
-        error: (errores) =>{
-          console.error(errores);
-        },
-        complete: () =>{
-          //No hay código
-        }
-      }
-    );*/
-
-    //Se agrega aquí para después matar estas suscripciones
+      //Se agrega aquí para después matar estas suscripciones
     this.suscripciones.push(this.finalizaSubscripcionrecargarTabla);
-    //this.suscripciones.push(recuperarPeriodos$);
   }
 
   onSubmit(){
     this.showSpinner = true;
-
-    this.resultadosPartidasExtraordinarias = []; //Limpio el resultado
-
-    const buscaForm$ = this._validaRechazaService.recuperarValidaDirectorVicerrector('', '').subscribe(
+    this.resultadosPartidasExtraordinarias = [];
+    var nuevoArray = [];
+    const buscaForm$ = this._validaRechazaService.recuperaValidaDTI('','').subscribe(
       {
-        next: (data) =>{
+        next: (data) => {
 
-            //data.filter((item)=> item.validaDirectorVicerrector==0)
+          //Limpio data para que solo aparezcan los que fueron validados por el
+          data = data.filter((item)=>item.validaDirectorVicerrector==1)
+          //data = data.filter((item)=>item.validaRectorDirAdmin==1);
+         data.forEach(element => {
 
-            data.forEach(element => {
-              switch(element['tipoPartida']){
+            if(element['validaDirectorVicerrector']== 2 || element['validaRectorDirAdmin'] == 2)
+            {
+              console.log('Aquí');
+            }
+            /*switch(element['tipoPartida']){
               case 1:
                 element['tipoPartida'] = 'Compra general';
                 break;
@@ -151,30 +136,44 @@ export class ValidaDirectorVicerrectorComponent implements OnInit {
               default:
                 element['tipoPartida'] = '';
                 break;
-              }
-            });
+            }*/
 
+            switch(element['validaDTI2']){
+                case 0:
+                  element['validaDTI2'] = 'SIN VALIDAR';
+                 break;
+                case 1:
+                  element['validaDTI2'] = 'VALIDADA';
+                  break;
+                case 2:
+                  element['validaDTI2'] = 'RECHAZADA';
+                  break;
+                default:
+                 element['validaDTI2'] = '';
+                  break;
+            }
 
-
+          });
           this.resultadosPartidasExtraordinarias = data;
           console.log(this.resultadosPartidasExtraordinarias);
           if(this.resultadosPartidasExtraordinarias.length<=0)
           {this.sinResultados = true;}
           else
           {this.sinResultados = false;}
-
         },
-        error: (errores) => {
+        error: (errores) =>{
           console.error(errores);
           this.showSpinner = false;
         },
-        complete:() =>{
+        complete: () =>{
           this.showSpinner = false;
         }
+
       }
     );
     this.suscripciones.push(buscaForm$);
   }
+
 
   ngOnDestroy() {
     console.info(this.suscripciones.length + 'suscripciones serán destruidas');
@@ -184,36 +183,36 @@ export class ValidaDirectorVicerrectorComponent implements OnInit {
   }
 
   //ef = errores - formulario
-  public efValidarDirectorVicerrector: any = {
+  public efValidaDTI: any = {
     Descripcion: ''
    };
 
    //mvf - mensajes de validación del formulario
-   public mvfValidarDirectorVicerrector: any = {
+   public mvfValidaDTI: any = {
      Descripcion: {
        required: 'Rellena este campo obligatorio'
      }
    };
 
   //dcf = detecta - cambios - formulario
-  private dcfValidarDirectorVicerrector(datos?: any): void{
+  private dcfValidaDTI(datos?: any): void{
     if(!this.formularioValidaciones)
     {return;}
     const formulario = this.formularioValidaciones;
 
-    for(const campo in this.efValidarDirectorVicerrector){
+    for(const campo in this.efValidaDTI){
 
-      if(this.efValidarDirectorVicerrector.hasOwnProperty(campo)){
+      if(this.efValidaDTI.hasOwnProperty(campo)){
         //Limpia mensajes de error previos de existir.
-        this.efValidarDirectorVicerrector[campo] = '';
+        this.efValidaDTI[campo] = '';
         const control = formulario.get(campo);
 
         if(control && control.dirty && control.valid){
-          const mensajes = this.mvfValidarDirectorVicerrector[campo];
+          const mensajes = this.mvfValidaDTI[campo];
 
           for(const clave in control.errors){
             if(control.errors.hasOwnProperty(clave)){
-              this.efValidarDirectorVicerrector[campo] += mensajes[clave] + ' ';
+              this.efValidaDTI[campo] += mensajes[clave] + ' ';
             }
           }
         }
@@ -232,6 +231,7 @@ export class ValidaDirectorVicerrectorComponent implements OnInit {
     }
     return false;
   }
+
 
 
 }

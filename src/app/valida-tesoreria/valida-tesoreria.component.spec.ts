@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UploadComponent } from './upload.component';
+import { ValidaTesoreriaComponent } from './valida-tesoreria.component';
 
-describe('UploadComponent', () => {
-  let component: UploadComponent;
-  let fixture: ComponentFixture<UploadComponent>;
+describe('ValidaTesoreriaComponent', () => {
+  let component: ValidaTesoreriaComponent;
+  let fixture: ComponentFixture<ValidaTesoreriaComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UploadComponent ]
+      declarations: [ ValidaTesoreriaComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UploadComponent);
+    fixture = TestBed.createComponent(ValidaTesoreriaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

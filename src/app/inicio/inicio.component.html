@@ -2,16 +2,55 @@
 Partidas extraordinarias
 </mat-toolbar>
 <div class="container">
-<div fxLayout="column" fxLayoutAlign="center center">
-<h1>Inicio</h1>
+<div fxLayout="row" fxLayoutGap = "15px" fxLayoutAlign="end center">
+<h1>Menú temporal para pruebas :) </h1>
 <button [routerLink]="['/nuevo']" type="button"  mat-flat-button color="primary" >
   <!--<mat-icon aria-hidden="false" aria-label="Example home icon">add</mat-icon>-->
   Nueva petición
 </button>
 <br>
-<button [routerLink]="['/validaDirectorVicerrector']" type="button"  mat-flat-button color="primary">Valida Director Vicerrector</button>
+<button [routerLink]="['/validaDirectorVicerrector']" type="button"  mat-flat-button color="primary">
+  Valida Director Vicerrector
+</button>
+<br>
+<button [routerLink]="['/validaDTI']" type="button"  mat-flat-button color="primary">
+  Valida DTI
+</button>
+<br>
+<button [routerLink]="['/validaRectorAdministrativo']" type="button"  mat-flat-button color="primary">
+  Valida Rector Administrativo
+</button>
+<br>
+<button [routerLink]="['/validaTesoreria']" type="button"  mat-flat-button color="primary">
+  Valida Tesoreria
+</button>
 <br>
 </div>
+
+
+<!--Radio buttons----------------------------------->
+<div class="container">
+  <mat-radio-group
+
+  fxLayout="row"
+  fxLayoutAlign="start"
+  fxLayoutGap = "10px"
+  fxLayout.xs="column"
+  fxLayoutGap.xs="10px"
+  fxLayoutAlign.xs="start"
+  [(ngModel)]="filtro" [ngModelOptions]="{standalone: true}"
+  >
+  <p><strong>Filtrar por: </strong></p>
+  <mat-radio-button [value]=""> <!--(change)="clickCambiaronTipoSeleccion($event)" -->
+    Todas
+  </mat-radio-button>
+  <mat-radio-button *ngFor="let opcion of tipoPartidaExtraordinaria" [value]="opcion"> <!--(change)="clickCambiaronTipoSeleccion($event)" -->
+    {{opcion}}
+  </mat-radio-button>
+  </mat-radio-group>
+</div>
+<!--Radio buttons----------------------------------->
+
 
   <!--<div fxLayout="column">
     <div class="container-upload">
@@ -26,6 +65,7 @@ Partidas extraordinarias
   <div fxLayout="column">
     <!-- Inicia tabla para mostrar los datos -->
     <tabla-dinamica
+    [filtro]="filtro"
     [resultadosPartidasExtraordinarias]="resultadosPartidasExtraordinarias"
     [pageSizeOptions]="pageSizeOptions"
     [displayedColumns]="displayedColumnsGrupo"

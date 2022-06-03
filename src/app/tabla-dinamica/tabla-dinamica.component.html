@@ -1,6 +1,6 @@
 <div fxFlex fxLayout="column" class="mat-elevation-z8">
   <mat-form-field>
-    <input (keyup)="aplicarFiltro($event)" matInput placeholder="Filtro">
+    <input (keyup)="aplicarFiltro($event)" matInput placeholder="Búsqueda avanzada...">
   </mat-form-field>
 
   <table mat-table [dataSource]="dataSource">
@@ -9,16 +9,19 @@
         <th  mat-header-cell *matHeaderCellDef>
             {{ displayedColumns.columnas[columna][0] }}</th>
 
-      <td  mat-cell *matCellDef="let element let i = index">
+      <td  mat-cell  *matCellDef="let element let i = index">
         <label>
 
-
-              <ng-container *ngIf="columna!='descripcion' && columna!='validaDirectorVicerrector' && columna!='validaRectorDirAdmin' && columna!='validaDTI' && columna!='aplicada'">
+              <ng-container *ngIf="columna!='costo' && columna!='descripcion' && columna!='validaDirectorVicerrector' && columna!='validaRectorDirAdmin' && columna!='validaDTI' && columna!='aplicada'">
                 {{ element[columna] }}
               </ng-container>
 
               <ng-container *ngIf="columna == 'descripcion'">
                 {{element[columna] | slice:0:35 }}  {{element[columna]?.length>34 ? '...' : ''}}
+              </ng-container>
+
+              <ng-container *ngIf="columna == 'costo'">
+                {{element[columna] | currency }}
               </ng-container>
 
 
@@ -51,19 +54,21 @@
               </ng-container>
 
               <ng-container *ngIf="columna == 'validaDTI'" >
-
+                <ng-container *ngIf="element['equipoComputo'] == 1">
                 <span *ngIf="element[columna] == 1" class="material-icons green-icon" matTooltip="Aprobado"><!--APROBADO-->
                   thumb_up
                 </span>
                 <span *ngIf="element[columna] == 2" class="material-icons red-icon" matTooltip="Rechazado"><!--RECHAZADO-->
                   thumb_down
                 </span>
-                <span *ngIf="element[columna] == 0" class="material-icons blue-icon" matTooltip="En proceso de revisión"><!--EN PROCESO DE REVISIÓN-->
+                <span *ngIf="element[columna] == 0 || element[columna] == null" class="material-icons blue-icon" matTooltip="En proceso de revisión"><!--EN PROCESO DE REVISIÓN-->
                   block_flipped
                 </span>
-                <p *ngIf="element[columna] == null" matTooltip="No aplica"><!--N/A-->
-                  N/A
-                </p>
+
+              </ng-container>
+              <ng-container *ngIf="element['equipoComputo'] == 0">
+                <p>N/A</p>
+              </ng-container>
               </ng-container>
 
               <ng-container *ngIf="columna == 'aplicada'" >
@@ -71,8 +76,8 @@
                 <span *ngIf="element[columna] == 1" class="material-icons green-icon" matTooltip="Aprobado"><!--APROBADO-->
                   thumb_up
                 </span>
-                <span *ngIf="element[columna] == 2" class="material-icons red-icon" matTooltip="Rechazado"><!--RECHAZADO-->
-                  thumb_down
+                <span *ngIf="element[columna] == 2" class="material-icons red-icon" matTooltip="En proceso de concluir"><!--RECHAZADO-->
+                  pause
                 </span>
                 <span *ngIf="element[columna] == 0" class="material-icons blue-icon" matTooltip="En proceso de revisión"><!--EN PROCESO DE REVISIÓN-->
                   block_flipped
@@ -81,38 +86,64 @@
                   N/A
                 </p>
               </ng-container>
-              <!--VALIDACIONES de si aprobaron o rechazaron la solicitud------------------------------------------------------------------------>
-
-              <ng-container *ngIf="columna == 'ver'" >
-                <a  matTooltip="Ver más">
-                  <span (click)="desplegarDialogo(element)" class="material-icons">
-                    visibility
-                    </span>
-                </a>
-              </ng-container>
 
               <ng-container *ngIf="columna == 'editar'" >
-              <ng-container *ngIf="element['validaDirectorVicerrector']<=0 && element['validaRectorDirAdmin'] <=0 && element['validaDTI'] <=0">
+                <ng-container *ngIf="element['validaDirectorVicerrector']<=0 && element['validaRectorDirAdmin'] <=0 && element['validaDTI'] <=0">
 
-                <a  matTooltip="Editar">
-                  <span (click)="editar(element)"  class="material-icons">
-                    mode_edit
-                    </span>
+                  <a  matTooltip="Editar">
+                    <span (click)="editar(element)"  class="material-icons">
+                      mode_edit
+                      </span>
+                  </a>
+                  <a  matTooltip="Eliminar">
+                    <span (click)="eliminar(element)" class="material-icons">
+                      delete
+                      </span>
+                  </a>
+                </ng-container>
+                <!--Validar si va a aparecer dependiendo si ya lo Aprovaron o rechazaron por lo tanto ya no se puede modificar-->
+                <a *ngIf="element['validaDirectorVicerrector']>0" matTooltip="Ver más">
+                  <span (click)="verDetalle(element)" class="material-icons">
+                      visibility
+                      </span>
                 </a>
-                <a  matTooltip="Eliminar">
-                  <span (click)="eliminar(element)" class="material-icons">
-                    delete
+              </ng-container>
+
+              <!--VALIDACIONES de si aprobaron o rechazaron la solicitud------------------------------------------------------------------------>
+
+              <ng-container *ngIf="columna == 'verDirVic'" >
+                <a  matTooltip="Ver más">
+                  <span (click)="desplegarDialogo(element)" class="material-icons">
+                    search
                     </span>
                 </a>
               </ng-container>
-  <!--Validar si va a aparecer dependiendo si ya lo Aprovaron o rechazaron por lo tanto ya no se puede modificar-->
-  <!-------->   <a *ngIf="element['validaDirectorVicerrector']>0" matTooltip="Ver más">                                               <!------------------------>
-  <!-------->       <span (click)="verDetalle(element)" class="material-icons">                <!------------------------>
-  <!-------->       visibility                                                          <!------------------------>
-  <!-------->       </span>                                                             <!------------------------>
-  <!-------->  </a>                                                                     <!------------------------>
-  <!-------------------------------------------------------------------------------------------------------------->
+
+              <ng-container *ngIf="columna == 'verDTI'" >
+                <a  matTooltip="Ver más">
+                  <span (click)="desplegarDialogoDTI(element)" class="material-icons">
+                    search
+                    </span>
+                </a>
               </ng-container>
+
+              <ng-container *ngIf="columna == 'verRector'" >
+                <a  matTooltip="Ver más">
+                  <span (click)="desplegarDialogRector(element)" class="material-icons">
+                    search
+                    </span>
+                </a>
+              </ng-container>
+
+              <ng-container *ngIf="columna == 'verCompras'" >
+                <a  matTooltip="Ver más">
+                  <span (click)="desplegarDialogCompras(element)" class="material-icons">
+                    search
+                    </span>
+                </a>
+              </ng-container>
+
+
 
         </label>
 

@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ViewChild, ChangeDetectorRef, SimpleChanges }
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { resultadosValidaDirectorVicerrector } from 'src/shared/models/tabla.model';
 import { AprobarRechazarComponent } from '../aprobar-rechazar/aprobar-rechazar.component';
 import { Router } from '@angular/router';
 import { CatalogosService } from '../services/catalogo.service';
@@ -25,6 +24,7 @@ export class TablaDinamicaComponent implements OnInit {
   @Input() tamanoTabla: string = '';
   @Input() pageSizeOptions= [];
   @Input() public displayedColumns;
+  @Input() filtro:string;
 
   //tabla variables
   @ViewChild(MatTable) table: MatTable<any>;
@@ -113,22 +113,68 @@ export class TablaDinamicaComponent implements OnInit {
 
   }
 
-  desplegarDialogo(valor: resultadosValidaDirectorVicerrector[]){
+  desplegarDialogo(valor){
     let dialogRef = this.dialog.open(AprobarRechazarComponent, {
       width: '50%',
       height: '95%',
       disableClose: true,
       autoFocus: true,
 
-      data: {valor}
+      data: {valor, modulo:'vicerrector'}
     });
 
     //para saber que el botón fue seleccionado
     dialogRef.afterClosed().subscribe(result =>{
       console.log(`Resultado: ${result}`);
-
     })
   }
+
+  desplegarDialogoDTI(valor){
+    let dialogRef = this.dialog.open(AprobarRechazarComponent, {
+      width: '50%',
+      height: '95%',
+      disableClose: true,
+      autoFocus: true,
+
+      data: {valor, modulo:'DTI'}
+    });
+
+    //para saber que el botón fue seleccionado
+    dialogRef.afterClosed().subscribe(result =>{
+      console.log(`Resultado: ${result}`);
+    })
+  }
+
+  desplegarDialogRector(valor){
+    let dialogRef = this.dialog.open(AprobarRechazarComponent, {
+      width: '50%',
+      height: '95%',
+      disableClose: true,
+      autoFocus: true,
+
+      data: {valor, modulo:'rector'}
+    });
+    //para saber que el botón fue seleccionado
+    dialogRef.afterClosed().subscribe(result =>{
+      console.log(`Resultado: ${result}`);
+    })
+  }
+
+  desplegarDialogCompras(valor){
+    let dialogRef = this.dialog.open(AprobarRechazarComponent, {
+      width: '50%',
+      height: '95%',
+      disableClose: true,
+      autoFocus: true,
+
+      data: {valor, modulo:'compras'}
+    });
+    //para saber que el botón fue seleccionado
+    dialogRef.afterClosed().subscribe(result =>{
+      console.log(`Resultado: ${result}`);
+    })
+  }
+
 
   aplicarFiltro(filterValue){
     this.dataSource.filter = filterValue.target.value.trim().toLowerCase();
@@ -155,10 +201,40 @@ ngAfterViewInit(): void {
 
 ngOnChanges(changes: SimpleChanges) {
   //2022-05-20 para ver que al cargar por primera vez la tabla se recargue para mostrar los resultados.
-  let change = changes['resultadosPartidasExtraordinarias'];
-  if(!change.firstChange){
+  try {
+    let change = changes['resultadosPartidasExtraordinarias'];
+    if(!change.firstChange){
     this.addData();
   }
+  } catch (error) {
+
+  }
+
+
+  for(let propName in changes){
+    let change = changes[propName];
+    if(changes['filtro'])
+    {
+      this.dataSource.filter = change.currentValue;
+    }
+    //let curVal  = JSON.stringify(change.currentValue);
+    //let prevVal = JSON.stringify(change.previousValue);
+
+          /*console.log(curVal);
+          console.log('-------------------------------------');
+          console.log(prevVal);*/
+  }
+
+
+
+/*
+  let fil = changes['filtro'];
+  console.log(fil);
+  if(!fil.firstChange){
+    this.aplicarFiltro(fil);
+  }*/
+
+
   /*for (let propName in changes) {
     let change = changes[propName];
     let curVal  = JSON.stringify(change.currentValue);
@@ -168,7 +244,7 @@ ngOnChanges(changes: SimpleChanges) {
           console.log(prevVal);
        }*/
 
-  console.log(changes);
+  //console.log(changes);
 }
 
 }

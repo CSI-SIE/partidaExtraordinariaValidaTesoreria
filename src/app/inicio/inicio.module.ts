@@ -21,7 +21,11 @@ import { AprobarRechazarComponent } from '../aprobar-rechazar/aprobar-rechazar.c
 import { RechazarComponent } from '../rechazar/rechazar.component';
 import { EliminarSolicitudComponent } from '../eliminar-solicitud/eliminar-solicitud.component';
 import { DetallePartidaComponent } from '../detalle-partida/detalle-partida.component';
-
+import { SubirArchivoComponent } from '../subir-archivo/subir-archivo.component';
+import { ProgressBarComponent } from '../progress-bar/progress-bar.component';
+import { ValidaDTIComponent } from '../valida-dti/valida-dti.component';
+import { ValidaRectorAdministrativoComponent } from '../valida-rector-administrativo/valida-rector-administrativo.component';
+import { ValidaTesoreriaComponent } from '../valida-tesoreria/valida-tesoreria.component';
 
 
 @NgModule({
@@ -33,7 +37,12 @@ import { DetallePartidaComponent } from '../detalle-partida/detalle-partida.comp
     AprobarRechazarComponent,
     RechazarComponent,
     EliminarSolicitudComponent,
-    DetallePartidaComponent
+    DetallePartidaComponent,
+    SubirArchivoComponent,
+    ProgressBarComponent,
+    ValidaDTIComponent,
+    ValidaRectorAdministrativoComponent,
+    ValidaTesoreriaComponent
   ],
   imports: [
     CommonModule,

@@ -95,6 +95,7 @@ export class CatalogosService extends ServicioBase {
   }
 
   public obtenerListadoConceptosById(_id:number):Observable<any>{
+
     const parametros = {
       servicio: 'administrativo',
       accion: 'registroPartidaExtraordinaria',
@@ -164,63 +165,7 @@ export class CatalogosService extends ServicioBase {
     return this.consulta(parametros);
   }
   //-----------------------------------------------------------------------------------------------------------------------------------------
-  public guardarValidacion(): Observable<any>{
-    const parametros = {
-      servicio: 'catalogo',
-      accion: 'NOMBRE DE LA API',
-      acciones: 1,
-      descripcionDelPeriodo: 'FALTA CAMBIAR EL NOMBRE AQUI',
-      tipoRespuesta: 'json'
-    };
-    return this.consulta(parametros);
-  }
 
-  public recuperaPeriodos(): Observable<any>{
-    const parametros = {
-      servicio: 'catalogo',
-      accion: 'NOMBRE DE LA API',
-      acciones: 1,
-      tipoRespuesta: 'json'
-    };
-    return this.consulta(parametros);
-  }
-
-  public guardarValidacionRechazo(_id:number,_validadoRechazado:string)
-  {
-    const parametros = {
-      servicio: 'catalogo',
-      accion: 'NOMBRE DE LA API',
-      acciones: 1,
-      id: _id,
-      validadoRechazado: _validadoRechazado,
-      tipoRespuesta: 'json'
-    };
-    return this.consulta(parametros);
-  }
-
-  public recuperarValidaDirectorVicerrector(_idPeriodo): Observable<any>{
-    const parametros = {
-      accion: 'NOMBRE API',
-      servicio: 'catalogo',
-      idPeriodo: _idPeriodo,
-      tipoRespuesta: 'json'
-    };
-    return this.consulta(parametros);
-  }
-
-
-
-  public motivoRechazo(_id: number, _motivo:string): Observable<any>{
-    const parametros = {
-      accion: 'NOMBRE api',
-      servicio: 'catalogo',
-      id: _id,
-      motivo: _motivo,
-
-      tipoRespuesta: 'json'
-    };
-    return this.consulta(parametros);
-  }
 
 
 

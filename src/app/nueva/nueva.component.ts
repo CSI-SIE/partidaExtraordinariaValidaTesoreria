@@ -9,6 +9,7 @@ import { CatalogosService } from '../services/catalogo.service';
 import { HttpClient } from '@angular/common/http';
 import { Concepto } from 'src/shared/models/concepto.model';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { ModeloArchivo } from 'src/shared/models/archivo.model';
 
 @Component({
   selector: 'app-nueva',
@@ -19,12 +20,13 @@ export class NuevaComponent implements OnInit {
 
   //Subir archivos--------------------
   fileName = '';
+
   @Input()
   requiredFileType:string;
   uploadProgress:number;
   uploadSub: Subscription;
   //-----------------------------------
-
+  nuevaEditar:string;
   public tipo:number;
 
   idRegistroGlobal:number;
@@ -44,6 +46,10 @@ export class NuevaComponent implements OnInit {
 
   horizontalPosition: MatSnackBarHorizontalPosition = 'right';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
+
+  //archivos
+  filePdf:ModeloArchivo [] = [];
+  //-----
 
   constructor(private _fb: FormBuilder,
   public route: ActivatedRoute,
@@ -86,6 +92,11 @@ export class NuevaComponent implements OnInit {
         false,
         []
       ],
+
+      documentoNombre: [null, Validators.required],
+
+      documentoNombre_nombreOriginal: [null, Validators.required],
+
       detalleConceptos: this._fb.array([
         this._fb.group({
           IdRegistro: [0],
@@ -111,6 +122,8 @@ export class NuevaComponent implements OnInit {
 
   }
 
+
+
   get detalles() {
     return this.formNuevaSolicitud.get('detalleConceptos') as FormArray;
   }
@@ -129,7 +142,6 @@ export class NuevaComponent implements OnInit {
     if(conceptos.length>0)
     {
       this.detalles.clear();
-
       conceptos.forEach(element => {
         if(element.borrado==0)//Se van a visualizar solo los que NO estan borrados.
 
@@ -137,7 +149,7 @@ export class NuevaComponent implements OnInit {
           this._fb.group({
             IdRegistro: [element.idRegistro],
             ConceptoPorDetalle: [element.concepto],
-            Monto: [element.monto]
+            Monto: [parseFloat(element.monto.toString())]
           })
         )
       });
@@ -339,11 +351,15 @@ export class NuevaComponent implements OnInit {
       map(params => Number(params.get('idRegistro')))
     ).subscribe(idRegistro =>{
 
+
+
       //Valida si tiene id, el id es el que se obtiene desde la ruta, el id es el que se envió desde la partida seleccionada desde la tabla y dieron editar.
       if(idRegistro>0){
+       this.nuevaEditar = 'Editar'
       this.idRegistroGlobal = idRegistro;
    //   this.formNuevaSolicitud.disable();//Deshabilita TODOS los controles si tiene determinado valor
-      const obtenerConceptos$ = this._catalogosService.obtenerListadoConceptosById(idRegistro).subscribe(
+      const obtenerConceptos$ = this._catalogosService.obtenerListadoConceptosById(
+        idRegistro).subscribe(
         {
           next:(conceptos)=>{
             //this.detalles.removeAt(0);
@@ -361,12 +377,17 @@ export class NuevaComponent implements OnInit {
       );
       this.suscripciones.push(obtenerConceptos$);
       //-------------------------------------------------------------------------------------------------
-      const obtenerSolicitud$ = this._catalogosService.obtenerSolicitudById(idRegistro).subscribe(
+      const obtenerSolicitud$ = this._catalogosService.obtenerSolicitudById(
+        idRegistro).subscribe(
         {
           next:(data) => {
             this.solicitudModel = data;
             console.log(this.solicitudModel);
-            if(this.solicitudModel[0].borrado == 1 || this.solicitudModel[0].validaDirectorVicerrector > 0 || this.solicitudModel[0].validaRectorDirAdmin > 0 || this.solicitudModel[0].validaDTI > 0 || this.solicitudModel[0].aplicada > 0)
+            if(this.solicitudModel[0].borrado == 1 ||
+              this.solicitudModel[0].validaDirectorVicerrector > 0 ||
+              this.solicitudModel[0].validaRectorDirAdmin > 0 ||
+              this.solicitudModel[0].validaDTI > 0 ||
+              this.solicitudModel[0].aplicada > 0)
             {
               //alert('Este registro ya fue borrado o revisado anteriormente, por lo tanto no es posible su edición, a continuación será redirigido a la pantalla principal');
               this.router.navigateByUrl('/inicio');
@@ -379,7 +400,7 @@ export class NuevaComponent implements OnInit {
               Descripcion:  this.solicitudModel[0].descripcion,
               Justificacion: this.solicitudModel[0].justificacion,
               Proveedor: this.solicitudModel[0].proveedor,
-              CostoActual: this.solicitudModel[0].costo,
+              CostoActual: parseFloat( this.solicitudModel[0].costo),
               EquipoComputo: this.solicitudModel[0].equipoComputo
             }
             this.formNuevaSolicitud.patchValue(fijarDatos); //Seteo los datos obtenidos en cada control del formulario.
@@ -391,8 +412,11 @@ export class NuevaComponent implements OnInit {
           complete:() =>{}
         }
       );
-      console.log("idRegistro: ",idRegistro );
+        console.log("idRegistro: ",idRegistro );
         this.suscripciones.push(obtenerSolicitud$);
+      }
+      else{
+        this.nuevaEditar = 'Nueva'
       }
 
     });
@@ -412,6 +436,8 @@ export class NuevaComponent implements OnInit {
     }*/
   }
 
+
+
   onKeyUp() {
 
     this.CostoActualLocal = parseFloat(this.formNuevaSolicitud.value['CostoActual']);
@@ -426,6 +452,8 @@ export class NuevaComponent implements OnInit {
     this.faltanteDetallar = this.CostoActualLocal - this.sumaMontosPorConcepto;
 
   }
+
+
 
   //ef = errores - formulario--------------------------------------
   public efCompraGeneral: any = {
@@ -521,16 +549,32 @@ export class NuevaComponent implements OnInit {
       duration: 2000
     });
   }
-
-    cancelUpload() {
-    this.uploadSub.unsubscribe();
-    this.reset();
-    }
-
-    reset() {
-    this.uploadProgress = null;
-    this.uploadSub = null;
-    }
   //-------------------------------
+
+  getFile($event){
+    this.filePdf = $event;
+
+    this.filePdf.forEach(element => {
+
+      //console.log(element);
+      this.formNuevaSolicitud.value['documentoNombre_nombreOriginal'].setValue(element.documentoNombre_nombreOriginal);
+
+      this.formNuevaSolicitud.value['documentoNombre_nombreOriginal'].updateValueAndValidity();
+
+      this.formNuevaSolicitud.value['documentoNombre'].setValue(element.documentoNombre_nombreOriginal);
+
+      this.formNuevaSolicitud.value['documentoNombre'].updateValueAndValidity();
+
+      /*this.formulario.documentoNombre_nombreOriginal.setValue(element.documentoNombre_nombreOriginal);
+      this.formulario.documentoNombre_nombreOriginal.updateValueAndValidity();
+
+      this.formulario.documentoNombre.setValue(element.documentoNombre);
+      this.formulario.documentoNombre.updateValueAndValidity();*/
+    });
+  }
+
+  //get formulario() { return this.formNuevaSolicitud.controls}
+
+  //
 
 }

@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DownloadComponent } from './download.component';
+import { ValidaDTIComponent } from './valida-dti.component';
 
-describe('DownloadComponent', () => {
-  let component: DownloadComponent;
-  let fixture: ComponentFixture<DownloadComponent>;
+describe('ValidaDTIComponent', () => {
+  let component: ValidaDTIComponent;
+  let fixture: ComponentFixture<ValidaDTIComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DownloadComponent ]
+      declarations: [ ValidaDTIComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DownloadComponent);
+    fixture = TestBed.createComponent(ValidaDTIComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
