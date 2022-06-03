@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { Periodo } from 'src/shared/models/periodo.model';
@@ -25,7 +25,7 @@ export class ValidaDirectorVicerrectorComponent implements OnInit {
 
   private suscripciones: Subscription[];
 
-  public formularioValidaciones: FormGroup;
+  public formularioValidaciones: UntypedFormGroup;
 
   showSpinner = false;
   clickBusqueda = false;
@@ -59,7 +59,7 @@ export class ValidaDirectorVicerrectorComponent implements OnInit {
     };
   //------------------------------------
 
-  constructor(private _fb: FormBuilder,
+  constructor(private _fb: UntypedFormBuilder,
     private _validaRechazaService: ValidaRechazaService,
     public _dialog: MatDialog) {
 

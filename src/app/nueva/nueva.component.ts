@@ -1,6 +1,6 @@
 import { _isNumberValue } from '@angular/cdk/coercion';
 import { ChangeDetectorRef, Component, Input, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormArray, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router'
 import { map } from 'rxjs/operators'
@@ -34,7 +34,7 @@ export class NuevaComponent implements OnInit {
   public solicitudModel: Solicitud;
 
   private suscripciones: Subscription[];
-  public formNuevaSolicitud: FormGroup;
+  public formNuevaSolicitud: UntypedFormGroup;
 
   public partidaExtraordinariaSeleccionada: string = 'Compra general';
   public tipoPartidaExtraordinaria:string[]=['Compra general', 'Gastos a comprobar', 'Reembolso', 'Gastos de viajes'];
@@ -51,7 +51,7 @@ export class NuevaComponent implements OnInit {
   filePdf:ModeloArchivo [] = [];
   //-----
 
-  constructor(private _fb: FormBuilder,
+  constructor(private _fb: UntypedFormBuilder,
   public route: ActivatedRoute,
   private _catalogosService: CatalogosService,
   private router: Router,
@@ -125,7 +125,7 @@ export class NuevaComponent implements OnInit {
 
 
   get detalles() {
-    return this.formNuevaSolicitud.get('detalleConceptos') as FormArray;
+    return this.formNuevaSolicitud.get('detalleConceptos') as UntypedFormArray;
   }
 
   addDetalleConcepto() {
