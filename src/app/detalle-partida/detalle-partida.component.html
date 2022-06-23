@@ -54,18 +54,20 @@
           <!--Detalle por conceptos-->
           <br>
           <ng-container *ngIf="this.conceptosDyMontos.length>0">
-          <p>Detalle por concepto</p>
+          <mat-card>
+            <i>Detalle por concepto</i>
 
-          <!--Meter en un ciclo para desglosar cada concepto-->
-          <div fxLayout="row" *ngFor="let elem of this.conceptosDyMontos">
-            <div fxLayout="column">
-              <br>
-              <p><strong>Concepto: </strong>{{elem.concepto}}</p>
-              <p><strong>Monto: </strong> {{elem.monto}}</p>
+            <!--Meter en un ciclo para desglosar cada concepto-->
+            <div fxLayout="row" *ngFor="let elem of this.conceptosDyMontos">
+              <div fxLayout="column">
+                <br>
+                <p><strong>Concepto: </strong>{{elem.concepto}}</p>
+                <p><strong>Monto: </strong> {{elem.monto}}</p>
+
+              </div>
 
             </div>
-
-          </div>
+          </mat-card>
         </ng-container>
 
 
@@ -75,17 +77,17 @@
     </div>
 
 
-    <p><strong>Archivos de cotización: </strong></p>
+    <!--<p><strong>Archivos de cotización: </strong></p>
     <button matTooltip="clic para descargar" mat-button mat-Stroked-button  color="primary">
       Descargar documento(s)
       <span class="material-icons">
       attach_file
       </span>
-    </button>
+    </button>-->
 
     <div fxLayout="column">
-      <br><br>
       <mat-divider></mat-divider>
+
       <p><strong>Seguimiento a la solicitud</strong></p>
       <ng-container>
         <p><strong>Director / Vicerrector</strong></p> <p *ngIf="this.data.valor.comentarioRechazoDirectorVicerrector">Motivo del rechazo: {{this.data.valor.comentarioRechazoDirectorVicerrector}}</p>
@@ -102,7 +104,7 @@
           </span>
       </ng-container>
       </ng-container>
-      <br><br>
+      <br>
       <mat-divider></mat-divider>
       <ng-container>
         <p><strong>Rector / Director administrativo</strong></p> <p *ngIf="this.data.valor.comentarioRechazoRectorDirAdmin">Motivo del rechazo: {{this.data.valor.comentarioRechazoRectorDirAdmin}}</p>
@@ -122,7 +124,7 @@
 
 
       <ng-container *ngIf="this.data.valor.equipoComputo == 1">
-        <br><br>
+        <br>
         <mat-divider></mat-divider>
         <p><strong>Dirección de Tecnologías de la Información (DTI)</strong></p> <p *ngIf="this.data.valor.comentarioRechazoDTI">Motivo del rechazo: {{this.data.valor.comentarioRechazoDTI}}</p>
         <ng-container >
@@ -139,8 +141,16 @@
       </ng-container>
       </ng-container>
 
+      <!--<ng-container *ngIf="this.modeloArchivo.length>0">
+        <p>Nombre del archivo: {{this.modeloArchivo[0].nombreArchivo}}</p>
+        <a target="" href="{{'https://sie.iest.edu.mx/descargaExterna/descargaPartidas/?arch='+this.modeloArchivo[0].llave+'&data=false'}}">Dale</a>
+
+
+        <p>{{this.modeloArchivo[0].llave}}</p>
+      </ng-container>-->
+
       <ng-container *ngIf="this.data.valor.aplicada" >
-        <br><br>
+        <br>
       <mat-divider></mat-divider>
         <p><strong>Estatus compras</strong></p>
         <span *ngIf="this.data.valor.aplicada == 1" class="material-icons green-icon" matTooltip="Aprobado"><!--APROBADO-->
@@ -156,6 +166,57 @@
           N/A
         </p>
       </ng-container>
+
+      <br>
+      <mat-divider></mat-divider>
+      <mat-card>
+      <ng-container>
+        <mat-selection-list #shoes [multiple]="false">
+          <div *ngIf="this.modeloArchivo.length>0" mat-subheader>Documento(s) adjunto(s) <span class="material-icons">
+            attach_file
+            </span></div>
+          <div *ngIf="this.modeloArchivo.length==0" mat-subheader>Sin documentos adjuntos <span class="material-icons">
+            attach_file
+            </span></div>
+
+          <mat-list *ngFor="let archivo of this.modeloArchivo">
+            <!--<mat-list-option *ngFor="let archivo of this.modeloArchivo" [value]="archivo.llave">-->
+            <div fxLayout="row">
+            <div fxLayout="row" fxFlex="90">
+              <p>
+              <!--<mat-icon mat-list-icon>description</mat-icon>-->
+              <a class="btn"
+                  type="button"
+                  mat-stroked-button
+                  color="primary"
+                  href="{{'https://sie.iest.edu.mx/archivos/partidasExtraOrdinarias/'+archivo.llave+'.'+archivo.extension+''}}"
+                  download="{{archivo.nombreArchivo}}">
+                  <span class="material-icons">cloud_download</span> Descargar</a>
+              <!--<a target="" href="{{'https://sie.iest.edu.mx/descargaExterna/descargaPartidas/?arch='+archivo.llave+'&data=false'}}">{{archivo.nombreArchivo}}</a>-->
+              {{archivo.nombreArchivo}}</p>
+            </div>
+
+            <div fxLayout="row" fxFlex="10">
+              <!--<button type="button" mat-icon-button color="primary"><span class="material-icons">delete</span></button>-->
+            </div>
+            </div>
+            <mat-divider></mat-divider>
+          </mat-list>
+        </mat-selection-list>
+        <!--<mat-selection-list #shoes [multiple]="false">
+          <div mat-subheader>Archivos</div>
+          <mat-list-option *ngFor="let shoe of typesOfShoes" [value]="shoe">
+            <mat-icon mat-list-icon>description</mat-icon>
+            {{shoe}}
+          </mat-list-option>
+        </mat-selection-list>-->
+
+        <!--<p>
+          Seleccionado: {{shoes.selectedOptions.selected[0]?.value}}
+        </p>-->
+      </ng-container>
+    </mat-card>
+
     </div>
 
   </div>

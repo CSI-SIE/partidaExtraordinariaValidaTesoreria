@@ -1,0 +1,39 @@
+<form>
+  <div fxLayout="column" fxLayoutAlign="center center" class="container" >
+    <form [formGroup]="formCostoFinal" (ngSubmit)="onSubmit()">
+      <div fxLayoutAlign="center">
+        <p>Costo total: </p>
+        <p> {{this.data.monto | currency}}</p>
+        <br>
+      </div>
+      <mat-divider></mat-divider>
+      <br>
+      <div fxLayoutAlign="center">
+        <mat-form-field appearance="outline">
+          <mat-label>Costo real:</mat-label>
+          <input type="number" formControlName="CostoReal" matInput placeholder="0000.00">
+        </mat-form-field>
+      </div>
+      <div
+        fxLayout="row"
+        fxLayout.xs="column"
+        fxLayoutAlign="space-around center">
+
+        <button mat-button
+        mat-dialog-close="true"
+        type="button"
+         mat-stroked-button
+         color="primary">
+         Cancelar
+        </button>
+
+        <button
+        type="submit"
+        mat-flat-button
+        [disabled]="formCostoFinal.invalid"
+        color="primary">
+        Terminar</button>
+      </div>
+
+    </form>
+  </div>

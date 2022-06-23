@@ -1,4 +1,5 @@
 export interface Periodo{
   idPeriodo: number;
-  descripcion:string;
+  abrPeriodo:string;
+  actual:number;
 }

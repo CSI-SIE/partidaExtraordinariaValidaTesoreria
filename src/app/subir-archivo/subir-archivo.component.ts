@@ -54,8 +54,8 @@ export class SubirArchivoComponent implements OnInit {
           _this.incrementar_progress(0);
 
           _this.datosArchivo = [];
-          _this.datosArchivo.push({documentoNombre:resp.generatedName, documentoNombre_nombreOriginal: resp.originalName});
-          _this.filePdf.emit({documentoNombre:resp.generatedName, documentoNombre_nombreOriginal: resp.originalName});
+          //_this.datosArchivo.push({documentoNombre:resp.generatedName, documentoNombre_nombreOriginal: resp.originalName});
+          //_this.filePdf.emit({documentoNombre:resp.generatedName, documentoNombre_nombreOriginal: resp.originalName});
         }
       }
       else{

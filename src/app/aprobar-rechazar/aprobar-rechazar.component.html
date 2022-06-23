@@ -3,6 +3,7 @@
 </div>
 
 
+
 <div class="container">
 <div fxLayout="column" >
   <div fxLayout="column">
@@ -33,7 +34,7 @@
           <br>
           <p><strong>¿Es equipo de computo? </strong>{{this.data.valor.equipoComputo ==1 ? 'si' : 'no'}}</p>
           <mat-divider></mat-divider>
-          <br>
+
         </div>
 
 
@@ -46,18 +47,20 @@
           <!--Detalle por conceptos-->
           <br>
           <ng-container *ngIf="this.conceptosDyMontos.length>0">
-          <p>Detalle por concepto</p>
+          <mat-card>
+            <i>Detalle por concepto</i>
 
-          <!--Meter en un ciclo para desglosar cada concepto-->
-          <div fxLayout="row" *ngFor="let elem of this.conceptosDyMontos">
-            <div fxLayout="column">
-              <br>
-              <p><strong>Concepto: </strong>{{elem.concepto}}</p>
-              <p><strong>Monto: </strong> {{elem.monto | currency}}</p>
+            <!--Meter en un ciclo para desglosar cada concepto-->
+            <div fxLayout="row" *ngFor="let elem of this.conceptosDyMontos">
+              <div fxLayout="column">
+                <br>
+                <p><strong>Concepto: </strong>{{elem.concepto}}</p>
+                <p><strong>Monto: </strong> {{elem.monto | currency}}</p>
+
+              </div>
 
             </div>
-
-          </div>
+          </mat-card>
         </ng-container>
 
 
@@ -66,17 +69,10 @@
 
     </div>
 
-
-    <p><strong>Archivos de cotización: </strong></p>
-    <button matTooltip="clic para descargar" mat-button mat-Stroked-button  color="primary">
-      Descargar documento(s)
-      <span class="material-icons">
-      attach_file
-      </span>
-    </button>
+    <!--||Seguimiento||||||||||||||||||||||||||||-->
 
     <div fxLayout="column">
-      <br><br>
+      <br>
       <mat-divider></mat-divider>
       <p><strong>Seguimiento a la solicitud</strong></p>
       <ng-container>
@@ -151,29 +147,56 @@
       </ng-container>
     </div>
 
+    <!--|||||||||||||||||||||||||||||||||||||||||-->
   </div>
-  <br> <br> <br>
+  <br>
 
 
-  <!--<div fxLayout="column">
-    <mat-divider></mat-divider>
-    <p><strong>Notas: </strong></p>
-    <mat-form-field appearance="fill">
-      <mat-label>Anotación</mat-label>
-      <textarea matInput formControlName="" placeholder=""></textarea>
-    </mat-form-field>
-  </div>-->
+  <!--///Documentos//////////////////////////////////////////////////////////////////////////////////////////////////////-->
+  <mat-divider></mat-divider>
+  <mat-card>
+  <ng-container>
+    <mat-selection-list #shoes [multiple]="false">
+      <div *ngIf="this.modeloArchivo.length>0" mat-subheader>Documento(s) adjunto(s) <span class="material-icons">
+        attach_file
+        </span></div>
+      <div *ngIf="this.modeloArchivo.length==0" mat-subheader>Sin documentos adjuntos <span class="material-icons">
+        attach_file
+        </span></div>
 
+      <mat-list *ngFor="let archivo of this.modeloArchivo">
+        <!--<mat-list-option *ngFor="let archivo of this.modeloArchivo" [value]="archivo.llave">-->
+        <div fxLayout="row">
+        <div fxLayout="row" fxFlex="90">
+          <p>
+          <!--<mat-icon mat-list-icon>description</mat-icon>-->
+          <a class="btn"
+                  type="button"
+                  mat-stroked-button
+                  color="primary"
+                  href="{{'https://sie.iest.edu.mx/archivos/partidasExtraOrdinarias/'+archivo.llave+'.'+archivo.extension+''}}"
+                  download="{{archivo.nombreArchivo}}">
+                  <span class="material-icons">cloud_download</span> Descargar</a>
+          <!--<a target="" href="{{'https://sie.iest.edu.mx/descargaExterna/descargaPartidas/?arch='+archivo.llave+'&data=false'}}">{{archivo.nombreArchivo}}</a>-->
+          {{archivo.nombreArchivo}}</p>
+        </div>
 
+        <div fxLayout="row" fxFlex="10">
+          <!--<button type="button" mat-icon-button color="primary"><span class="material-icons">delete</span></button>-->
+        </div>
+        </div>
+        <mat-divider></mat-divider>
+      </mat-list>
+    </mat-selection-list>
+  </ng-container>
+  </mat-card>
+  <!--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+  <br><br>
   <div *ngIf="((this.data.valor.validaDirectorVicerrector == 0 || this.data.valor.validaDirectorVicerrector == null) && this.data.modulo == 'vicerrector') ||
   ((this.data.valor.validaDTI == 0 || this.data.valor.validaDTI == null) && this.data.modulo == 'DTI') ||
-  ((this.data.valor.validaRectorDirAdmin == 0 || this.data.valor.validaRectorDirAdmin == null) && this.data.modulo == 'rector') ||
-  ((this.data.valor.aplicada == 0 || this.data.valor.aplicada == null) && this.data.modulo == 'compras')"
+  ((this.data.valor.validaRectorDirAdmin == 0 || this.data.valor.validaRectorDirAdmin == null) && this.data.modulo == 'rector')"
   fxLayout="row" fxLayoutAlign="center" fxLayoutGap="35px">
 
-    <button (click)="guardar(this.data.valor.idRegistro)"  type="button" mat-dialog-close="true" matTooltip="Aprobar solicitud" mat-flat-button color="primary"><span class="material-icons">
-      thumb_up
-      </span> Aprobar</button>
 
     <button (click)="rechazar(this.data.valor.idRegistro)" type="button" mat-dialog-close="true" mat-flat-button color="primary" mat-button matTooltip="Rechazar solicitud">
       <span class="material-icons">
@@ -181,13 +204,32 @@
       </span> Rechazar
     </button>
 
+    <button (click)="guardar(this.data.valor.idRegistro)"  type="button" mat-dialog-close="true" matTooltip="Aprobar solicitud" mat-flat-button color="primary"><span class="material-icons">
+      thumb_up
+      </span> Aprobar</button>
+
   </div>
-  <div *ngIf="((this.data.valor.validaDirectorVicerrector == 1 || this.data.valor.validaDirectorVicerrector == 2) && this.data.modulo == 'vicerrector') ||
-  ((this.data.valor.validaDTI == 1 || this.data.valor.validaDTI == 2) && this.data.modulo == 'DTI') ||
-  ((this.data.valor.validaRectorDirAdmin == 1 || this.data.valor.validaRectorDirAdmin == 2) && this.data.modulo == 'rector') ||
-  ((this.data.valor.aplicada == 1 || this.data.valor.aplicada == 2) && this.data.modulo == 'compras')"
-   fxLayout="row" fxLayoutAlign="center" fxLayoutGap="35px" >
-    <p>Esta solicitud ya fue atendida.</p>
+  <!--Mensaje de Solicitud-->
+
+  <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="35px">
+    <button *ngIf="this.data.modulo== 'compras'" (click)="imprimirReporte(this.data.valor.idRegistro)" type="button" mat-dialog-close="true" mat-flat-button color="primary" mat-button matTooltip="Imprimir">
+      <span class="material-icons">
+        print
+      </span>
+    </button>
+
+    <button *ngIf="this.data.modulo== 'compras' && this.data.valor.aplicada == 2" (click)="montoFinal()" type="button" mat-dialog-close="true" mat-flat-button color="primary" mat-button matTooltip="Terminar todo el proceso de la solicitud">
+      <span class="material-icons">
+        check
+      </span> Terminar solicitud
+    </button>
+
+    <button *ngIf="this.data.modulo== 'compras' && this.data.valor.aplicada == 0" (click)="validarCompras(this.data.valor.idRegistro)" type="button" mat-dialog-close="true" mat-flat-button color="primary" mat-button matTooltip="En proceso de concluir con la solicitud">
+      <span class="material-icons">
+        pause
+      </span> Por concluir
+    </button>
   </div>
+
 </div>
 </div>

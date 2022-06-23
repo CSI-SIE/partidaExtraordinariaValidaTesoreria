@@ -18,7 +18,9 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSortModule } from '@angular/material/sort';
-
+import {MatListModule} from '@angular/material/list';
+import {MatCardModule} from '@angular/material/card';
+import {MatStepperModule} from '@angular/material/stepper';
 
 @NgModule({
   imports: [
@@ -40,7 +42,10 @@ import { MatSortModule } from '@angular/material/sort';
     MatDividerModule,
     MatIconModule,
     MatProgressBarModule,
-    MatSortModule
+    MatSortModule,
+    MatListModule,
+    MatCardModule,
+    MatStepperModule
   ],
   exports: [
     MatFormFieldModule,
@@ -61,7 +66,10 @@ import { MatSortModule } from '@angular/material/sort';
     MatDividerModule,
     MatIconModule,
     MatProgressBarModule,
-    MatSortModule
+    MatSortModule,
+    MatListModule,
+    MatCardModule,
+    MatStepperModule
   ],
   declarations: [
 

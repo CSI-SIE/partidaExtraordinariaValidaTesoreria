@@ -9,10 +9,10 @@
         <th  mat-header-cell *matHeaderCellDef>
             {{ displayedColumns.columnas[columna][0] }}</th>
 
-      <td  mat-cell  *matCellDef="let element let i = index">
+      <td  mat-cell *matCellDef="let element let i = index">
         <label>
 
-              <ng-container *ngIf="columna!='costo' && columna!='descripcion' && columna!='validaDirectorVicerrector' && columna!='validaRectorDirAdmin' && columna!='validaDTI' && columna!='aplicada'">
+              <ng-container *ngIf="columna!='montoReal' && columna!='costof' && columna!='costo' && columna!='descripcion' && columna!='validaDirectorVicerrector' && columna!='validaRectorDirAdmin' && columna!='validaDTI' && columna!='validacionDTI' && columna!='aplicada'">
                 {{ element[columna] }}
               </ng-container>
 
@@ -24,6 +24,13 @@
                 {{element[columna] | currency }}
               </ng-container>
 
+              <ng-container *ngIf="columna == 'costof'">
+                {{element[columna] | currency }}
+              </ng-container>
+
+              <ng-container *ngIf="columna == 'montoReal'">
+                {{element[columna] | currency }}
+              </ng-container>
 
               <!--VALIDACIONES de si aprobaron o rechazaron la solicitud------------------------------------------------------------------------>
 
@@ -36,7 +43,7 @@
                     thumb_down
                   </span>
                   <span *ngIf="element[columna] == 0" class="material-icons blue-icon" matTooltip="En proceso de revisión"><!--EN PROCESO DE REVISIÓN-->
-                    block_flipped
+                    hourglass_top
                   </span>
               </ng-container>
 
@@ -49,7 +56,7 @@
                   thumb_down
                 </span>
                 <span *ngIf="element[columna] == 0" class="material-icons blue-icon" matTooltip="En proceso de revisión"><!--EN PROCESO DE REVISIÓN-->
-                  block_flipped
+                  hourglass_top
                 </span>
               </ng-container>
 
@@ -62,14 +69,39 @@
                   thumb_down
                 </span>
                 <span *ngIf="element[columna] == 0 || element[columna] == null" class="material-icons blue-icon" matTooltip="En proceso de revisión"><!--EN PROCESO DE REVISIÓN-->
-                  block_flipped
+                  hourglass_top
                 </span>
 
               </ng-container>
               <ng-container *ngIf="element['equipoComputo'] == 0">
-                <p>N/A</p>
+               N/A
               </ng-container>
               </ng-container>
+
+              <ng-container *ngIf="columna=='fechaAutorizacionDTI' && element['equipoComputo']==0">
+                N/A
+              </ng-container>
+
+              <ng-container *ngIf="columna == 'validacionDTI'" >
+                <ng-container *ngIf="element['equipoComputo'] == 1">
+                <span *ngIf="element[columna] == 1" class="material-icons green-icon" matTooltip="Aprobado"><!--APROBADO-->
+                  thumb_up
+                </span>
+                <span *ngIf="element[columna] == 2" class="material-icons red-icon" matTooltip="Rechazado"><!--RECHAZADO-->
+                  thumb_down
+                </span>
+                <span *ngIf="element[columna] == 0 || element[columna] == null" class="material-icons blue-icon" matTooltip="En proceso de revisión"><!--EN PROCESO DE REVISIÓN-->
+                  hourglass_top
+                </span>
+
+              </ng-container>
+              <ng-container *ngIf="element['equipoComputo'] == 0">
+                N/A
+              </ng-container>
+              </ng-container>
+
+
+
 
               <ng-container *ngIf="columna == 'aplicada'" >
 
@@ -80,14 +112,14 @@
                   pause
                 </span>
                 <span *ngIf="element[columna] == 0" class="material-icons blue-icon" matTooltip="En proceso de revisión"><!--EN PROCESO DE REVISIÓN-->
-                  block_flipped
+                  hourglass_top
                 </span>
                 <p *ngIf="element[columna] == null" matTooltip="No aplica"><!--N/A-->
                   N/A
                 </p>
               </ng-container>
 
-              <ng-container *ngIf="columna == 'editar'" >
+              <ng-container *ngIf="columna == 'editar'">
                 <ng-container *ngIf="element['validaDirectorVicerrector']<=0 && element['validaRectorDirAdmin'] <=0 && element['validaDTI'] <=0">
 
                   <a  matTooltip="Editar">
@@ -104,7 +136,7 @@
                 <!--Validar si va a aparecer dependiendo si ya lo Aprovaron o rechazaron por lo tanto ya no se puede modificar-->
                 <a *ngIf="element['validaDirectorVicerrector']>0" matTooltip="Ver más">
                   <span (click)="verDetalle(element)" class="material-icons">
-                      visibility
+                    search
                       </span>
                 </a>
               </ng-container>

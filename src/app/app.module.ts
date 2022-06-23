@@ -7,10 +7,12 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from 'src/shared/material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SesionSieComponent } from './sesion-sie/sesion-sie.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    SesionSieComponent
   ],
   imports: [
     BrowserModule,

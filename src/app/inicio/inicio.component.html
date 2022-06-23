@@ -2,75 +2,92 @@
 Partidas extraordinarias
 </mat-toolbar>
 <div class="container">
-<div fxLayout="row" fxLayoutGap = "15px" fxLayoutAlign="end center">
-<h1>Menú temporal para pruebas :) </h1>
-<button [routerLink]="['/nuevo']" type="button"  mat-flat-button color="primary" >
-  <!--<mat-icon aria-hidden="false" aria-label="Example home icon">add</mat-icon>-->
-  Nueva petición
-</button>
-<br>
-<button [routerLink]="['/validaDirectorVicerrector']" type="button"  mat-flat-button color="primary">
-  Valida Director Vicerrector
-</button>
-<br>
-<button [routerLink]="['/validaDTI']" type="button"  mat-flat-button color="primary">
-  Valida DTI
-</button>
-<br>
-<button [routerLink]="['/validaRectorAdministrativo']" type="button"  mat-flat-button color="primary">
-  Valida Rector Administrativo
-</button>
-<br>
-<button [routerLink]="['/validaTesoreria']" type="button"  mat-flat-button color="primary">
-  Valida Tesoreria
-</button>
-<br>
-</div>
-
-
-<!--Radio buttons----------------------------------->
-<div class="container">
-  <mat-radio-group
-
-  fxLayout="row"
-  fxLayoutAlign="start"
-  fxLayoutGap = "10px"
-  fxLayout.xs="column"
-  fxLayoutGap.xs="10px"
-  fxLayoutAlign.xs="start"
-  [(ngModel)]="filtro" [ngModelOptions]="{standalone: true}"
-  >
-  <p><strong>Filtrar por: </strong></p>
-  <mat-radio-button [value]=""> <!--(change)="clickCambiaronTipoSeleccion($event)" -->
-    Todas
-  </mat-radio-button>
-  <mat-radio-button *ngFor="let opcion of tipoPartidaExtraordinaria" [value]="opcion"> <!--(change)="clickCambiaronTipoSeleccion($event)" -->
-    {{opcion}}
-  </mat-radio-button>
-  </mat-radio-group>
-</div>
-<!--Radio buttons----------------------------------->
-
-
-  <!--<div fxLayout="column">
-    <div class="container-upload">
-      <button    >
-          SUBIR ARCHIVO
-      </button>
-      <input name="file" id="file" type="file" >
-    </div>
-  </div>-->
-
-
+  <div fxLayout="row" fxLayoutGap = "15px" fxLayoutAlign="end center">
+  <h1>Menú temporal para pruebas :) </h1>
+  <button [routerLink]="['/nuevo']" type="button"  mat-flat-button color="primary" >
+    <!--<mat-icon aria-hidden="false" aria-label="Example home icon">add</mat-icon>-->
+    Nueva petición
+  </button>
+  <br>
+  <button [routerLink]="['/validaDirectorVicerrector']" type="button"  mat-flat-button color="primary">
+    Valida Director Vicerrector
+  </button>
+  <br>
+  <button [routerLink]="['/validaDTI']" type="button"  mat-flat-button color="primary">
+    Valida DTI
+  </button>
+  <br>
+  <button [routerLink]="['/validaRectorAdministrativo']" type="button"  mat-flat-button color="primary">
+    Valida Rector Administrativo
+  </button>
+  <br>
+  <button [routerLink]="['/validaTesoreria']" type="button"  mat-flat-button color="primary">
+    Valida Tesoreria
+  </button>
+  <br>
+  </div>
+  <br><br><br>
+  <mat-divider></mat-divider>
   <div fxLayout="column">
-    <!-- Inicia tabla para mostrar los datos -->
-    <tabla-dinamica
-    [filtro]="filtro"
-    [resultadosPartidasExtraordinarias]="resultadosPartidasExtraordinarias"
-    [pageSizeOptions]="pageSizeOptions"
-    [displayedColumns]="displayedColumnsGrupo"
-    [tamanoTabla]="tamanoTabla" >
-    </tabla-dinamica>
-    <!-- Finaliza tabla -->
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-around center">
+      <form [formGroup]="formularioValidaciones" (ngSubmit)="onSubmit()">
+        <div fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="1.1rem grid">
+        <mat-form-field fxFlex="100" [floatLabel]="'auto'">
+          <mat-label>Periodo</mat-label>
+          <mat-select [value]="opcionPorDefault" formControlName="Descripcion" [required]="esRequerido('Descripcion')">
+            <mat-option *ngFor="let periodo of catalogoPeriodo" [value]="periodo.idPeriodo">{{ periodo.abrPeriodo }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="ef.Descripcion">{{ ef.Descripcion }}</mat-error>
+        </mat-form-field>
+        </div>
+
+        <div
+          fxLayout="row"
+          fxLayout.xs="column"
+          fxLayoutAlign="space-around center">
+            <button [disabled]="formularioValidaciones.invalid" (click)="disteClick()" mat-flat-button color="primary">Buscar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <br>
+
+  <!--Radio buttons----------------------------------->
+    <mat-radio-group
+    fxLayout="row"
+    fxLayoutAlign="start"
+    fxLayoutGap = "10px"
+    fxLayout.xs="column"
+    fxLayoutGap.xs="10px"
+    fxLayoutAlign.xs="start"
+    [(ngModel)]="filtro" [ngModelOptions]="{standalone: true}"
+    >
+    <p><strong>Filtrar por: </strong></p>
+    <mat-radio-button *ngFor="let opcion of tipoPartidaExtraordinaria" [value]="opcion.valor"> <!--(change)="clickCambiaronTipoSeleccion($event)" -->
+      {{opcion.titulo}}
+    </mat-radio-button>
+    </mat-radio-group>
+  <!--Radio buttons----------------------------------->
+
+
+  <!-- Inicia tabla para mostrar los datos -->
+  <tabla-dinamica
+  [idPerson]="idPerson"
+  [filtro]="filtro"
+  [resultadosPartidasExtraordinarias]="resultadosPartidasExtraordinarias"
+  [pageSizeOptions]="pageSizeOptions"
+  [displayedColumns]="displayedColumnsGrupo"
+  [tamanoTabla]="tamanoTabla" >
+  </tabla-dinamica>
+  <!-- Finaliza tabla -->
+  <div *ngIf="sinResultados && clickBusqueda" fxFlex fxLayout="column" fxLayoutAlign="center center">
+    <h2>Sin resultados</h2>
+  </div>
+
+  <div fxLayout="row"
+  fxLayout.xs="column"
+  fxLayoutAlign="center center">
+  <mat-spinner *ngIf="showSpinner"></mat-spinner>
   </div>
 </div>

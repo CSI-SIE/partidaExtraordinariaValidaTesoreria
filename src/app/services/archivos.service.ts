@@ -12,32 +12,36 @@ export class ServicioArchivo extends ServicioBase {
     super(_sb);
   }
 
-  public subirArchivo(){
+  /*public subirArchivo(_idRegistro: number, _fileDialog:File){
     const parametros = {
       servicio: 'administrativo',
-      accion: '',
+      secureuri: false,
+      accion: 'subirArchivoV2',
+      data: _idRegistro,
+      fileElementId: _fileDialog,
       tipoRespuesta: 'json'
     };
     return this.consulta(parametros);
-  }
+  }*/
 
   public listaArchivosCotizacion(_id: number){
     const parametros = {
       servicio: 'administrativo',
-      accion: 'listaArchivosCotizacion',
+      accion: 'PRE_Partidas_Registra_Documento_Listar',
       idPartida: _id,
       tipoRespuesta: 'json'
     };
     return this.consulta(parametros);
   }
 
-  public eliminaAdjuntoCotizacion(_id: number){
+  public eliminarArchivo(_idArchivo:number){
     const parametros = {
       servicio: 'administrativo',
-      accion: 'eliminaAdjuntoCotizacion',
-      idMaterial: _id,
+      accion: 'PRE_Partidas_Registra_Documento_Eliminar',
+      idArchivo: _idArchivo,
       tipoRespuesta: 'json'
     };
+    return this.consulta(parametros);
   }
 
 }

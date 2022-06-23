@@ -3,10 +3,10 @@ import { Observable, observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
-const APIURL = '/api/administrativo/administrativo.php';
-//const APIURL = '/app/administrativo/subirArchivoV2.php';
+//const APIURL = '/api/administrativo/administrativo.php';
+const APIURL = '/api/archivos/archivos_PruebaPartidas.php';
 
-export class ServicioBase {
+export class ServicioArchivos {
   constructor(
     private _http:HttpClient
   ) {}

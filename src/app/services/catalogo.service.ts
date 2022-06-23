@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable, of} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 import { ServicioBase } from './servicio-base.service';
 
@@ -20,7 +20,7 @@ export class CatalogosService extends ServicioBase {
   public recargarTabla$ = this.recargarTabla.asObservable();
 
   //Agregar nueva solicitud--------
-  public guardarNuevaSolicitudPartidaExtraordinaria(_tipo:number, _descripcion:string, _proveedor:string, _justificacion: string, _costo: number,  _equipo: number, _detalle: string): Observable<any>{
+  public guardarNuevaSolicitudPartidaExtraordinaria(_tipo:number, _descripcion:string, _proveedor:string, _justificacion: string, _costo: number,  _equipo: number, _detalle: string, _idPeriodo:number, _idPersonCaptura:number): Observable<any>{
     const parametros = {
       servicio: 'administrativo',
       accion: 'registroPartidaExtraordinaria',
@@ -28,14 +28,14 @@ export class CatalogosService extends ServicioBase {
       idPartida: 0,
       idUnidad: 0,
       idUnidadArea: 0,
-      idPersonCaptura: 23269,
+      idPersonCaptura: _idPersonCaptura,
       tipo: _tipo,
       descripcion: _descripcion,
       proveedor: _proveedor,
       costo: _costo,
       justificacion: _justificacion,
       detalle: _detalle,
-      periodo: 96,
+      periodo: _idPeriodo,
       equipo: _equipo,
 
       tipoRespuesta: 'json'
@@ -48,7 +48,7 @@ export class CatalogosService extends ServicioBase {
   //exec  Pre_Captura_PartidaExtraordinaria 1, 0, 0, 0, 'descripcion', 'proveedor', 1, 'Justificacion', 1, 23269, '|', 96, 0
   //exec  Pre_Captura_PartidaExtraordinaria 1, 0, 0, 0, 'Descripcion', 'Proveedor', 500, 'Justificacion', 1, 23269, '|', 96, 0
 
-  public obtenerListadoSolicitudesPorPersona():Observable<any>{
+  public obtenerListadoSolicitudesPorPersona(_idPeriodo:number, _idPersonCaptura:number):Observable<any>{
     const parametros = {
       servicio: 'administrativo',
       accion: 'registroPartidaExtraordinaria',
@@ -56,14 +56,14 @@ export class CatalogosService extends ServicioBase {
       idPartida: 0,
       idUnidad: 0,
       idUnidadArea: 0,
-      idPersonCaptura: 23269,
+      idPersonCaptura: _idPersonCaptura,
       tipo: 1, //tipoPartida
       descripcion: '',
       proveedor: '',
       costo: 500,
       justificacion: '',
       detalle: '',
-      periodo: 96,
+      periodo: _idPeriodo,
       equipo: 0,
 
       tipoRespuesta: 'json'
@@ -71,7 +71,7 @@ export class CatalogosService extends ServicioBase {
     return this.consulta(parametros);
   }
 
-  public obtenerSolicitudById(_id:number):Observable<any>{
+  public obtenerSolicitudById(_id:number, _idPersonCaptura:number):Observable<any>{
     const parametros = {
       servicio: 'administrativo',
       accion: 'registroPartidaExtraordinaria',
@@ -79,14 +79,14 @@ export class CatalogosService extends ServicioBase {
       idPartida: _id,
       idUnidad: 0,
       idUnidadArea: 0,
-      idPersonCaptura: 23269,
+      idPersonCaptura: _idPersonCaptura,
       tipo: 1,
       descripcion: '',
       proveedor: '',
       costo: 500,
       justificacion: '',
       detalle: '',
-      periodo: 96,
+      periodo: 0,
       equipo: 0,
 
       tipoRespuesta: 'json'
@@ -94,7 +94,7 @@ export class CatalogosService extends ServicioBase {
     return this.consulta(parametros);
   }
 
-  public obtenerListadoConceptosById(_id:number):Observable<any>{
+  public obtenerConceptosById(_id:number):Observable<any>{
 
     const parametros = {
       servicio: 'administrativo',
@@ -103,14 +103,14 @@ export class CatalogosService extends ServicioBase {
       idPartida: _id,
       idUnidad: 0,
       idUnidadArea: 0,
-      idPersonCaptura: 23269,
+      idPersonCaptura:0,
       tipo: 0,
       descripcion: '',
       proveedor: '',
       costo: 0,
       justificacion: '',
       detalle: '',
-      periodo: 96,
+      periodo: 0,
       equipo: 0,
 
       tipoRespuesta: 'json'
@@ -118,7 +118,7 @@ export class CatalogosService extends ServicioBase {
     return this.consulta(parametros);
   }
 
-  public ModificarSolicitudPartidaExtraordinaria(_tipo:number, _descripcion:string, _proveedor:string, _justificacion: string, _costo: number,  _equipo: number, _detalle: string, _idPartida:number): Observable<any>{
+  public ModificarSolicitudPartidaExtraordinaria(_tipo:number, _descripcion:string, _proveedor:string, _justificacion: string, _costo: number,  _equipo: number, _detalle: string,_idPeriodo:number, _idPartida:number, _idPersonCaptura:number): Observable<any>{
     const parametros = {
       servicio: 'administrativo',
       accion: 'registroPartidaExtraordinaria',
@@ -126,14 +126,14 @@ export class CatalogosService extends ServicioBase {
       idPartida: _idPartida,
       idUnidad: 0,
       idUnidadArea: 0,
-      idPersonCaptura: 23269,
+      idPersonCaptura: _idPersonCaptura,
       tipo: _tipo,
       descripcion: _descripcion,
       proveedor: _proveedor,
       costo: _costo,
       justificacion: _justificacion,
       detalle: _detalle,
-      periodo: 96,
+      periodo: _idPeriodo,
       equipo: _equipo,
 
       tipoRespuesta: 'json'
@@ -142,7 +142,7 @@ export class CatalogosService extends ServicioBase {
     return this.consulta(parametros);
   }
 
-  public eliminarPartidaExtraOrdinaria(_id:number):Observable<any>{
+  public eliminarPartidaExtraOrdinaria(_id:number, _idPersonCaptura:number):Observable<any>{
     const parametros = {
       servicio: 'administrativo',
       accion: 'registroPartidaExtraordinaria',
@@ -150,14 +150,14 @@ export class CatalogosService extends ServicioBase {
       idPartida: _id,
       idUnidad: 0,
       idUnidadArea: 0,
-      idPersonCaptura: 23269,
+      idPersonCaptura: _idPersonCaptura,
       tipo: 0, //tipoPartida
       descripcion: '',
       proveedor: '',
       costo: 0,
       justificacion: '',
       detalle: '',
-      periodo: 96,
+      periodo: 0,
       equipo: 0,
 
       tipoRespuesta: 'json'

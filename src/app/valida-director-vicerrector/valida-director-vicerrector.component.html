@@ -19,17 +19,8 @@
 
             <mat-form-field fxFlex="100" [floatLabel]="'auto'">
               <mat-label>Periodo</mat-label>
-              <mat-select formControlName="Descripcion" [required]="esRequerido('Descripcion')">
-                <mat-option value="AGOSTO-DICIEMBRE 2022" >AGOSTO-DICIEMBRE 2022</mat-option>
-                <mat-option value="ENERO-JUNIO 2022">ENERO-JUNIO 2022</mat-option>
-                <mat-option value="AGOSTO-DICIEMBRE 2021">AGOSTO-DICIEMBRE 2021</mat-option>
-                <mat-option value="ENERO-JUNIO 2021">ENERO-JUNIO 2021</mat-option>
-                <mat-option value="AGOSTO-DICIEMBRE 2020">AGOSTO-DICIEMBRE 2020</mat-option>
-                <mat-option value="ENERO-JUNIO 2020">ENERO-JUNIO 2020</mat-option>
-                <mat-option value="AGOSTO-DICIEMBRE 2019">AGOSTO-DICIEMBRE 2019</mat-option>
-                <mat-option value="ENERO-JUNIO 2019">ENERO-JUNIO 2019</mat-option>
-                <mat-option value="AGOSTO-DICIEMBRE 2018">AGOSTO-DICIEMBRE 2018</mat-option>
-                <mat-option value="ENERO-JUNIO 2018">ENERO-JUNIO 2018</mat-option>
+              <mat-select [value]="opcionPorDefault" formControlName="Descripcion" [required]="esRequerido('Descripcion')">
+                <mat-option *ngFor="let periodo of catalogoPeriodo" [value]="periodo.idPeriodo">{{ periodo.abrPeriodo }}</mat-option>
               </mat-select>
               <mat-error *ngIf="efValidarDirectorVicerrector.Descripcion">{{ efValidarDirectorVicerrector.Descripcion }}</mat-error>
             </mat-form-field>
@@ -43,9 +34,9 @@
         </form>
       </div>
     </div>
-
+    <ng-container *ngIf="clickBusqueda">
         <!--Radio buttons----------------------------------->
-    <div class="container">
+      <br>
       <mat-radio-group
 
       fxLayout="row"
@@ -61,7 +52,7 @@
         {{opcion.titulo}}
       </mat-radio-button>
       </mat-radio-group>
-    </div>
+
     <!--Radio buttons----------------------------------->
 
     <div fxLayout="column">
@@ -91,5 +82,5 @@
     fxLayoutAlign="center center">
     <mat-spinner *ngIf="showSpinner"></mat-spinner>
     </div>
-
+  </ng-container>
 </div>

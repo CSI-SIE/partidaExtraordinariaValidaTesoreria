@@ -1,34 +1,26 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable, of} from 'rxjs';
-
-import { ServicioBase } from './servicio-base.service';
+import { ServicioArchivos } from './servicio-archivos.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UploadDownloadService extends ServicioBase{
+export class UploadDownloadService extends ServicioArchivos {
 
   constructor(
     private _sb:HttpClient
-  ) {
-    super(_sb);
-  }
+  ) { super(_sb); }
 
-  //
-
-
-   //Agregar nueva solicitud--------
-   public downloadFile(file: string): Observable<any>{
+  public subirArchivo(_idRegistro: number, _fileDialog:File){
+    //console.log(_fileDialog);
     const parametros = {
-      servicio: 'subir',
-      accion: 'AD_Descargar_archivo',
-      acciones: 1,
-
+      idPartida: _idRegistro,
+      file: _fileDialog,
+      documento: 'PartidasExtraordinarias',
       tipoRespuesta: 'json'
-
     };
     return this.consulta(parametros);
   }
-  //--------
+
+
 }

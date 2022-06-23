@@ -1,13 +1,13 @@
 <mat-toolbar color="primary">
 {{nuevaEditar}} partida extraordinaria
 </mat-toolbar>
-
-<div class="container">
-    <div fxLayout="column">
+<div fxLayout="row">
+    <div fxLayout="column" fxFlex="70">
       <!--Radio buttons----------------------------------->
       <div class="containerIn">
+        <mat-card>
+          <h2>Selecciona un tipo de partida extraordinaria</h2>
         <mat-radio-group
-
         fxLayout="row"
         fxLayoutAlign="space-around center"
         fxLayout.xs="column"
@@ -15,16 +15,11 @@
         fxLayoutAlign.xs="start"
         [(ngModel)]="partidaExtraordinariaSeleccionada" [ngModelOptions]="{standalone: true}"
         >
-        <mat-radio-button *ngFor="let opcion of tipoPartidaExtraordinaria" [value]="opcion"> <!--(change)="clickCambiaronTipoSeleccion($event)" -->
+        <mat-radio-button [disabled]="GuardadoCorrectamente" *ngFor="let opcion of tipoPartidaExtraordinaria" [value]="opcion"> <!--(change)="clickCambiaronTipoSeleccion($event)" -->
           {{opcion}}
         </mat-radio-button>
         </mat-radio-group>
-      </div>
-      <!--Radio buttons----------------------------------->
-
-<!-------------------------------------------------------------------------------------------------------->
-      <div class="containerIn">
-
+        <br>
         <p *ngIf="partidaExtraordinariaSeleccionada=='Compra general'">
           Es cuando se va a realizar alguna compra para adquirir un servicio o producto ya cotizado.</p>
         <p *ngIf="partidaExtraordinariaSeleccionada=='Gastos a comprobar'">
@@ -33,28 +28,31 @@
           Para solicitar la devolución de dinero a la persona que uso para adquirir un servicio o producto.</p>
         <p *ngIf="partidaExtraordinariaSeleccionada=='Gastos de viajes'">
           Cuando se requiera solicitar los viaticos a una persona para trasladarse a otra ciudad (hospedaje, transporte, alimentos, taxis).</p>
+      </mat-card>
+      </div>
+      <!--Radio buttons----------------------------------->
 
+<!-------------------------------------------------------------------------------------------------------->
+      <div class="containerIn">
 
-        <mat-divider></mat-divider>
-        <br>
-        <form [formGroup]="formNuevaSolicitud" (ngSubmit)="onSubmit()">
+        <form [formGroup]="formNuevaSolicitud">
 
         <!--Contenedor interno completo-->
         <div fxLayout="row" fxLayoutGap="20px" fxLayout.xs="column">
           <!--Columna de la izquierda-->
           <div fxLayout="column" fxFlex="50">
 
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="outline">
               <mat-label>Descripción completa del articulo o servicio:</mat-label>
               <textarea  matInput formControlName="Descripcion" placeholder="Descripción completa del articulo o servicio"></textarea>
             </mat-form-field>
 
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="outline">
               <mat-label>Proveedor:</mat-label>
               <input  matInput formControlName="Proveedor" placeholder="Ingresa un proveedor" value="">
             </mat-form-field>
 
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="outline">
               <mat-label>Justificación:</mat-label>
               <textarea matInput formControlName="Justificacion" placeholder="Justificación"></textarea>
             </mat-form-field>
@@ -65,7 +63,6 @@
             Es equipo de computo
             </mat-checkbox>
 
-            <subir-archivo #archivo (filePdf)="getFile($event)"></subir-archivo>
 
           </div>
 
@@ -76,9 +73,9 @@
           <div fxLayout="column" fxFlex="40">
             <div fxLayout="column">
 
-              <mat-form-field appearance="fill">
+              <mat-form-field appearance="outline">
                 <mat-label>Costo actual:</mat-label>
-                <input type="number" formControlName="CostoActual" matInput placeholder="Ingresa un costo" (click)="onKeyUp()" (keyup)="onKeyUp()">
+                <input type="number" formControlName="CostoActual" matInput placeholder="0" (click)="onKeyUp()" (keyup)="onKeyUp()">
               </mat-form-field>
 
 
@@ -90,20 +87,20 @@
               <div *ngFor="let detalle of detalles.controls; let i=index" [formGroupName]="i">
                 <div *ngIf="partidaExtraordinariaSeleccionada!='Compra general'" fxLayout="row" fxLayoutGap="20px">
                   <div flexLayout="row" fxLayoutGap="10px" fxFlex="80" fxLayoutAlign="start center">
-                    <mat-form-field fxFlex="65" [floatLabel]="'auto'" appearance="fill">
+                    <mat-form-field fxFlex="65" [floatLabel]="'auto'" appearance="outline">
                       <mat-label>Concepto:</mat-label>
                       <input formControlName="ConceptoPorDetalle" matInput placeholder="Detalle del concepto">
                     </mat-form-field>
 
-                    <mat-form-field fxFlex="20" [floatLabel]="'auto'" appearance="fill">
+                    <mat-form-field fxFlex="20" [floatLabel]="'auto'" appearance="outline">
                       <mat-label>Monto:</mat-label>
                       <input type="number" formControlName="Monto" matInput placeholder="Monto" (click)="onKeyUp()" (keyup)="onKeyUp()">
                     </mat-form-field>
                   </div>
                   <div fxLayout="row" fxLayoutGap="5px" fxFlex="20" fxLayoutAlign="space-around center" fxLayout.xs="column">
-                      <button (click)="addDetalleConcepto()" type="button"  mat-flat-button color="primary">+</button>
+                      <button *ngIf="!GuardadoCorrectamente" (click)="addDetalleConcepto()" type="button"  mat-flat-button color="primary">+</button>
 
-                      <button (click)="deleteDetalleConcepto(i)" type="button" mat-flat-button color="primary">x</button>
+                      <button *ngIf="!GuardadoCorrectamente" (click)="deleteDetalleConcepto(i)" type="button" mat-flat-button color="primary">x</button>
                       <br>
                   </div>
                 </div>
@@ -126,11 +123,17 @@
 
           </div>
         </div>
-
+        <mat-divider></mat-divider>
+        <br>
         <div  fxLayout="column">
-          <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="center center" fxLayout.xs="column">
-            <button [disabled]="formNuevaSolicitud.invalid" type="submit" mat-flat-button color="primary">Guardar</button>
-            <button [routerLink]="['/inicio']"  type="submit" mat-flat-button color="primary">Cancelar</button>
+          <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="center center" fxLayout.xs="column">
+            <button [routerLink]="['/inicio']" *ngIf="GuardadoCorrectamente" type="button" mat-flat-button color="primary">Salir</button>
+            <button [routerLink]="['/inicio']" *ngIf="!GuardadoCorrectamente" type="submit" mat-stroked-button color="primary">Cancelar</button>
+            <button [disabled]="formNuevaSolicitud.invalid || GuardadoCorrectamente" type="button" (click)="onSubmit()" mat-flat-button color="primary">
+              <span class="material-icons">save</span>
+              Guardar
+            </button>
+
             <br>
         </div>
         </div>
@@ -140,10 +143,96 @@
       </div>
 
 
-
-
-
     </div>
+
+    <mat-divider [vertical]="true"></mat-divider>
+
+    <div fxFlexLayout="column" fxFlex="30">
+    <div class="containerIn" >
+      <mat-card>
+         <h2>Adjuntar archivos <span class="material-icons">attach_file</span></h2>
+
+        <form [formGroup]="formArchivos">
+          <div fxLayout="column">
+            <div fxLayout="row" fxLayoutGap="20px" fxLayout.md="column" fxLayoutGap.md="10px">
+              <button type="button" [disabled]="!GuardadoCorrectamente && !this.activarSeleccionaArchivo"  mat-flat-button (click)="Archivo.click()" color="primary">Seleccionar... </button>
+              <button type="button" (click)="subirArchivo()" [disabled]="!NombreArchivo" mat-flat-button color="primary"><span class="material-icons">
+                cloud_upload
+                </span> Subir</button>
+            </div>
+            <input #Archivo type="file" hidden formControlName="fileCotizacion" (change)="clickeaste()">
+            <!--Porcentaje: {{percentDone}}% <br />-->
+            <p *ngIf="NombreArchivo">&nbsp;&nbsp;&nbsp;{{NombreArchivo}}</p>
+
+            <br>
+          </div>
+        </form>
+      </mat-card>
+
+      <br>
+        <div fxLayout="column">
+
+
+          <ng-container>
+            <mat-selection-list #shoes [multiple]="false">
+              <div *ngIf="this.modeloArchivo.length>0" mat-subheader>Documento(s) adjunto(s) <span class="material-icons">
+                attach_file
+                </span></div>
+              <div *ngIf="this.modeloArchivo.length==0" mat-subheader>Sin documentos adjuntos <span class="material-icons">
+                attach_file
+                </span></div>
+
+              <mat-list *ngFor="let archivo of this.modeloArchivo">
+                <!--<mat-list-option *ngFor="let archivo of this.modeloArchivo" [value]="archivo.llave">-->
+                <div fxLayout="row">
+                <div fxLayout="row" fxFlex="90">
+                  <p>
+                  <!--<mat-icon mat-list-icon>description</mat-icon>-->
+                  <!--<a class="btn" type="button" mat-stroked-button
+                  color="primary" href="{{'https://sie.iest.edu.mx/descargaExterna/descargaPartidas/?arch='+archivo.llave+'&data=false'}}">
+                  <span class="material-icons">cloud_download</span> Descargar</a>-->
+                  <a class="btn"
+                  type="button"
+                  mat-stroked-button
+                  color="primary"
+                  href="{{'https://sie.iest.edu.mx/archivos/partidasExtraOrdinarias/'+archivo.llave+'.'+archivo.extension+''}}"
+                  download="{{archivo.nombreArchivo}}">
+                  <span class="material-icons">cloud_download</span> Descargar</a>
+
+                  <!--<a target="" href="{{'https://sie.iest.edu.mx/descargaExterna/descargaPartidas/?archParExOrd='+archivo.llave+'&nombreArchivo='+archivo.nombreArchivo+'&data=false'}}">{{archivo.nombreArchivo}}</a>-->
+
+                  <!--<a target="" href="{{'https://sie.iest.edu.mx/archivos/partidasExtraOrdinarias/'+archivo.llave+'.'+archivo.extension+''}}" download="{{archivo.nombreArchivo}}">{{archivo.nombreArchivo}}</a>-->
+                  {{archivo.nombreArchivo}}
+                </p>
+
+                </div>
+
+                <div fxLayout="row" fxFlex="10">
+                  <button type="button" mat-icon-button color="primary" (click)="eliminarArchivo(archivo.idArchivo, archivo.nombreArchivo)"><span class="material-icons">delete</span></button>
+                </div>
+                </div>
+                <mat-divider></mat-divider>
+              </mat-list>
+            </mat-selection-list>
+            <!--<mat-selection-list #shoes [multiple]="false">
+              <div mat-subheader>Archivos</div>
+              <mat-list-option *ngFor="let shoe of typesOfShoes" [value]="shoe">
+                <mat-icon mat-list-icon>description</mat-icon>
+                {{shoe}}
+              </mat-list-option>
+            </mat-selection-list>-->
+
+            <!--<p>
+              Seleccionado: {{shoes.selectedOptions.selected[0]?.value}}
+            </p>-->
+          </ng-container>
+
+        </div>
+
+      </div>
+
+
+</div>
 
 
 

@@ -18,7 +18,7 @@ comentarioRechazoDTI:string;
 comentarioRechazoDirectorVicerrector:string;
 comentarioRechazoRectorDirAdmin:string;
 costo:string;//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-costof:string;
+costof:string;//costo final, se establece en el módulo de Compras
 descripcion:string;//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 equipoComputo: number;
 fechaAtencionTesoreria:string;

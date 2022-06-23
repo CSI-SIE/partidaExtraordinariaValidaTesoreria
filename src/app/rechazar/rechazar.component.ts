@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
-import { CatalogosService } from '../services/catalogo.service';
+
 
 @Component({
   selector: 'app-rechazar',
@@ -10,13 +9,12 @@ import { CatalogosService } from '../services/catalogo.service';
 })
 export class RechazarComponent implements OnInit {
 
-  private suscripciones: Subscription[];
+
 
   constructor(public dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) public data:any,
-    private _catalogosService: CatalogosService,
     public dialog: MatDialog) {
-      this.suscripciones = [];
+
     }
 
   ngOnInit(): void {

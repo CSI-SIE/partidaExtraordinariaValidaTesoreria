@@ -9,11 +9,14 @@
         fxLayout.xs="column"
         fxLayoutAlign="space-around center"
         fxLayoutGap="15">
+
+        <button mat-button (click)="onClick()" mat-stroked-button color="primary">Cancelar</button>
+
         <button mat-button [mat-dialog-close]="true" mat-flat-button color="primary"><span class="material-icons">
           delete
           </span> Eliminar</button>
         <!--<button mat-button (click)="onYesClick()" mat-flat-button [mat-dialog-close]="data.motivo" color="primary">Eliminar</button>-->
-        <button mat-button (click)="onClick()" mat-flat-button color="primary">Cancelar</button>
+
       </div>
 
   </form>

@@ -25,14 +25,13 @@ export class TablaDinamicaComponent implements OnInit {
   @Input() pageSizeOptions= [];
   @Input() public displayedColumns;
   @Input() filtro:string;
+  @Input() idPerson:number;
 
   //tabla variables
   @ViewChild(MatTable) table: MatTable<any>;
   @ViewChild('paginador', {static: false}) paginator: MatPaginator ;
   dataSource = new MatTableDataSource<any[]>();
   mostrarPaginador:boolean = false;
-
-
 
   constructor(public cdRef: ChangeDetectorRef,
     public dialog: MatDialog,
@@ -78,7 +77,7 @@ export class TablaDinamicaComponent implements OnInit {
 
         console.log('Se va a eliminar el id: ' + valor['idRegistro']);
 
-        const eliminarSolicitud$ = this._catalogosService.eliminarPartidaExtraOrdinaria(valor['idRegistro']).subscribe(
+        const eliminarSolicitud$ = this._catalogosService.eliminarPartidaExtraOrdinaria(valor['idRegistro'], this.idPerson).subscribe(
           {
             next: () => {
               //Entra al servicio de catalogos y en recargarTabla le envía un 1

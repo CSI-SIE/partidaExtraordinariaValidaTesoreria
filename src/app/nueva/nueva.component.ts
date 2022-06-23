@@ -1,15 +1,18 @@
 import { _isNumberValue } from '@angular/cdk/coercion';
-import { ChangeDetectorRef, Component, Input, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
-import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormArray, FormControl } from '@angular/forms';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormArray } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router'
 import { map } from 'rxjs/operators'
 import { Solicitud } from 'src/shared/models/solicitud.model';
 import { CatalogosService } from '../services/catalogo.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClientModule, HttpClient, HttpRequest, HttpResponse, HttpEventType } from '@angular/common/http';
 import { Concepto } from 'src/shared/models/concepto.model';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { ModeloArchivo } from 'src/shared/models/archivo.model';
+import { ValidaRechazaService } from '../services/validaRechaza.service';
+import { UploadDownloadService } from '../services/upload-download.service';
+import { ServicioArchivo } from '../services/archivos.service';
 
 @Component({
   selector: 'app-nueva',
@@ -18,8 +21,16 @@ import { ModeloArchivo } from 'src/shared/models/archivo.model';
 })
 export class NuevaComponent implements OnInit {
 
+  @ViewChild('Archivo',{static:false})
+  Archivo:ElementRef;
+
+  @ViewChild('radioButtons',{static:false})
+  radioButtons:ElementRef;
+
+  public GuardadoCorrectamente:boolean = false;
+  public activarSeleccionaArchivo: boolean = false;
   //Subir archivos--------------------
-  fileName = '';
+  NombreArchivo = '';
 
   @Input()
   requiredFileType:string;
@@ -28,13 +39,15 @@ export class NuevaComponent implements OnInit {
   //-----------------------------------
   nuevaEditar:string;
   public tipo:number;
-
+  private finalizaSubscripcionrecargarTabla: Subscription = null;
   idRegistroGlobal:number;
 
   public solicitudModel: Solicitud;
 
   private suscripciones: Subscription[];
   public formNuevaSolicitud: UntypedFormGroup;
+
+  public formArchivos: UntypedFormGroup;
 
   public partidaExtraordinariaSeleccionada: string = 'Compra general';
   public tipoPartidaExtraordinaria:string[]=['Compra general', 'Gastos a comprobar', 'Reembolso', 'Gastos de viajes'];
@@ -48,20 +61,61 @@ export class NuevaComponent implements OnInit {
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   //archivos
-  filePdf:ModeloArchivo [] = [];
+  public modeloArchivo: ModeloArchivo[];
+
   //-----
 
-  constructor(private _fb: UntypedFormBuilder,
+
+  idPerson = 0;
+
+  constructor(
+  private _validaRechazaService: ValidaRechazaService,
+  private _archivosService: UploadDownloadService,
+  private _fb: UntypedFormBuilder,
   public route: ActivatedRoute,
   private _catalogosService: CatalogosService,
+  private _subirArchivosService: ServicioArchivo,
   private router: Router,
   private http: HttpClient,
   private _snackBar: MatSnackBar,
+  private _router:Router
   ) {
 
   this.suscripciones = [];
+  this.modeloArchivo =[];
 
-    //formGroups ----------------------------------------------------
+    //formGroups Guardar----------------------------------------------------
+    /*this.formNuevaSolicitud = this._fb.group({
+      Descripcion: [
+        '',
+        [
+          Validators.required
+        ]
+      ],
+      Proveedor: [
+        '',
+        [
+          Validators.required
+        ]
+      ],
+      Justificacion: [
+        '',
+        [
+          Validators.required
+        ]
+      ],
+      CostoActual: [
+        null,
+        [
+          Validators.required
+        ]
+      ],
+      EquipoComputo:[
+        false,
+        []
+      ]
+    });*/
+
     this.formNuevaSolicitud = this._fb.group({
       Descripcion: [
         '',
@@ -82,9 +136,8 @@ export class NuevaComponent implements OnInit {
         ]
       ],
       CostoActual: [
-        '',
+        null,
         [
-          Validators.pattern('[0-9]*'),
           Validators.required
         ]
       ],
@@ -93,9 +146,9 @@ export class NuevaComponent implements OnInit {
         []
       ],
 
-      documentoNombre: [null, Validators.required],
+      //documentoNombre: [null, Validators.required],
 
-      documentoNombre_nombreOriginal: [null, Validators.required],
+      //documentoNombre_nombreOriginal: [null, Validators.required],
 
       detalleConceptos: this._fb.array([
         this._fb.group({
@@ -107,6 +160,16 @@ export class NuevaComponent implements OnInit {
     });
 
 
+
+
+    //formGroups Archivos--------------------------------------
+    this.formArchivos= this._fb.group({
+      fileCotizacion:[
+        null,
+        []
+      ],
+
+    });
      //---------------------------------------------------------------
 
     const observadorValidadorFormularioCompraGeneral$ =
@@ -245,6 +308,13 @@ export class NuevaComponent implements OnInit {
     }
   }
 
+  submitDePrueba(){
+
+    this.GuardadoCorrectamente = true;
+    this.formNuevaSolicitud.disable();
+
+  }
+
   onSubmit(){
 
     if(this.faltanteDetallar == 0 || this.partidaExtraordinariaSeleccionada == 'Compra general'){
@@ -291,17 +361,22 @@ export class NuevaComponent implements OnInit {
               this.formNuevaSolicitud.value['CostoActual'],
               equipoComputoNumerico,
               conceptosyMontos.substring(0,conceptosyMontos.length-1),
-              this.idRegistroGlobal
+              this.solicitudModel[0].idperiodo,//este idPeriodo es el que se obtiene en el ngOnInit
+              this.idRegistroGlobal,
+              this.idPerson
             ).subscribe(
               {
                 next: () =>{
-                  alert('Se he modificado correctamente');
+
+                  this.GuardadoCorrectamente = true;
+                  this.formNuevaSolicitud.disable();
+                  this.openSnackBar("Se ha modificado correctamente");
                 },
                 error: (errores) =>{
                   console.error(errores);
                 },
                 complete: () => {
-                  this.router.navigateByUrl('/inicio');
+                //  this.router.navigateByUrl('/inicio');
                 }
               }
             );
@@ -309,57 +384,112 @@ export class NuevaComponent implements OnInit {
           }
           else//agregar
           {
-            const guardar$ = this._catalogosService.guardarNuevaSolicitudPartidaExtraordinaria(
-              this.tipo,
-              this.formNuevaSolicitud.value['Descripcion'],
-              this.formNuevaSolicitud.value['Proveedor'],
-              this.formNuevaSolicitud.value['Justificacion'],
-              this.formNuevaSolicitud.value['CostoActual'],
-              equipoComputoNumerico,
-              conceptosyMontos.substring(0,conceptosyMontos.length-1)
-            ).subscribe(
-              {
-                next: () => {
-                  alert('Se ha guardado correctamente');
 
-                  //La respuesta es idPartida
+            //Periodos-------------
+            let idPeriodoActual:number = 0;
+            const periodos$ = this._validaRechazaService.recuperaPeriodos().subscribe(
+              {
+                next:(data) =>{
+                  //console.log(data);
+                  data = data.filter((item)=>item.actual==1);//filtro para obtener el idPeriodo actual
+                  idPeriodoActual = data[0]['idPeriodo'];
                 },
-                error: (errores) =>{
+                error:(errores)=>{
                   console.error(errores);
                 },
-                complete: () => {
-                  this.router.navigateByUrl('/inicio');
+                complete:()=>{
+
+                  if(idPeriodoActual>0)
+                  {
+                    const guardar$ = this._catalogosService.guardarNuevaSolicitudPartidaExtraordinaria(
+                      this.tipo,
+                      this.formNuevaSolicitud.value['Descripcion'],
+                      this.formNuevaSolicitud.value['Proveedor'],
+                      this.formNuevaSolicitud.value['Justificacion'],
+                      this.formNuevaSolicitud.value['CostoActual'],
+                      equipoComputoNumerico,
+                      conceptosyMontos.substring(0,conceptosyMontos.length-1),
+                      idPeriodoActual,
+                      this.idPerson
+                    ).subscribe(
+                      {
+                        next: (data) => {
+                          //console.log("<<<<<<<<<<<<<<<<Aquí>>>>>>>>>>>>");
+                          //console.log(data);
+                          //console.log(data[0]['idPartida']);
+                          this.idRegistroGlobal = data[0]['idPartida'];
+                          this.GuardadoCorrectamente = true;
+                          this.formNuevaSolicitud.disable();
+                          this.activarSeleccionaArchivo = true;
+                          this.openSnackBar("Se ha guardado correctamente");
+
+                          //alert('Se ha guardado correctamente');
+                        },
+                        error: (errores) =>{
+                          console.error(errores);
+                        },
+                        complete: () => {
+                       //   this.router.navigateByUrl('/inicio');
+                        }
+                      }
+                    );
+
+                    this.suscripciones.push(guardar$);
+                  }
+                  else
+                  {
+                    console.log('No se pudo obtener el IdPeriodo')
+                  }
+
                 }
               }
             );
-
-            this.suscripciones.push(guardar$);
+            this.suscripciones.push(periodos$);
           }
         }
     }
     else
     {
-      this.openSnackBar('Falta detallar los montos respecto al costo total.');
+      this.openSnackBar('Falta detallar los montos respecto al costo actual.');
     }
 
 
   }
 
   ngOnInit(): void {
+    //Busca una sesión======================
+    const sesion$ = this._validaRechazaService.obtieneSesion().subscribe(
+      {
+        next:(data: any) =>{
+          //si no hay sesión dentro de "data" va a traer "success"
+          //y redirijo a modulo que que se encarga que inicie sesión en el SIE
+          if(data.hasOwnProperty('success')){
+            this._router.navigate(['/debe-iniciar-sesion-SIE']);
+          }
+          else{
+            this.idPerson = data.idPerson;
+          }
+      },
+        error: (errores) =>{
+          console.error(errores);
+        }
+      }
+    );
+    this.suscripciones.push(sesion$);
+    //======================================
 
     this.route.paramMap.pipe(
       map(params => Number(params.get('idRegistro')))
     ).subscribe(idRegistro =>{
-
-
-
       //Valida si tiene id, el id es el que se obtiene desde la ruta, el id es el que se envió desde la partida seleccionada desde la tabla y dieron editar.
       if(idRegistro>0){
        this.nuevaEditar = 'Editar'
-      this.idRegistroGlobal = idRegistro;
+       this.idRegistroGlobal = idRegistro;
+       this.activarSeleccionaArchivo = true;
    //   this.formNuevaSolicitud.disable();//Deshabilita TODOS los controles si tiene determinado valor
-      const obtenerConceptos$ = this._catalogosService.obtenerListadoConceptosById(
-        idRegistro).subscribe(
+      const obtenerConceptos$ = this._catalogosService.obtenerConceptosById(
+        idRegistro
+        ).subscribe(
         {
           next:(conceptos)=>{
             //this.detalles.removeAt(0);
@@ -378,10 +508,18 @@ export class NuevaComponent implements OnInit {
       this.suscripciones.push(obtenerConceptos$);
       //-------------------------------------------------------------------------------------------------
       const obtenerSolicitud$ = this._catalogosService.obtenerSolicitudById(
-        idRegistro).subscribe(
+        idRegistro,
+        this.idPerson
+        ).subscribe(
         {
           next:(data) => {
-            this.solicitudModel = data;
+
+            if(data.length<=0)
+            {
+              this.router.navigateByUrl('/inicio');
+            }
+            else{
+              this.solicitudModel = data;
             console.log(this.solicitudModel);
             if(this.solicitudModel[0].borrado == 1 ||
               this.solicitudModel[0].validaDirectorVicerrector > 0 ||
@@ -395,25 +533,36 @@ export class NuevaComponent implements OnInit {
             }
 
             this.convertirTipoSeleccionadaNumToText(this.solicitudModel[0].tipoPartida);
-
+            console.log(this.solicitudModel[0].costo);
             let fijarDatos = { //Establesco los datos que vienen desde la DB
               Descripcion:  this.solicitudModel[0].descripcion,
               Justificacion: this.solicitudModel[0].justificacion,
               Proveedor: this.solicitudModel[0].proveedor,
               CostoActual: parseFloat( this.solicitudModel[0].costo),
+
               EquipoComputo: this.solicitudModel[0].equipoComputo
             }
+            console.log(parseFloat(this.solicitudModel[0].costo));
             this.formNuevaSolicitud.patchValue(fijarDatos); //Seteo los datos obtenidos en cada control del formulario.
+            }
+
 
           },
           error: (errores) => {
             console.error(errores);
           },
-          complete:() =>{}
+          complete:() =>{
+            this.onKeyUp();
+          }
         }
       );
         console.log("idRegistro: ",idRegistro );
         this.suscripciones.push(obtenerSolicitud$);
+
+
+      this.listarArchivos(idRegistro);
+
+
       }
       else{
         this.nuevaEditar = 'Nueva'
@@ -436,7 +585,36 @@ export class NuevaComponent implements OnInit {
     }*/
   }
 
+  listarArchivos(_idRegistro:number){
+    this.modeloArchivo= [];
+    //Listar archivos-----------------
+    const obtenerlistardearchivosdelasolicitud$ = this._subirArchivosService.listaArchivosCotizacion(
+      _idRegistro).subscribe(
+      {
+        next:(archivos)=>{
+          //recorro y agrego la extensión del archivo a el modelo de archivos
+          archivos.forEach(element => {
+            if(element['nombreArchivo']){
+              //console.log(element['nombreArchivo']);
+              //console.log(element['nombreArchivo'].split(".").pop());
+              element['extension'] = element['nombreArchivo'].split(".").pop();
+            }
+          });
+          this.modeloArchivo = archivos;
+          console.log(archivos);
+         },
+        error: (errores) => {
+          console.error(errores);
+        },
+        complete:() =>{
 
+        }
+      }
+    );
+    this.suscripciones.push(obtenerlistardearchivosdelasolicitud$);
+
+    //--------------------------------
+  }
 
   onKeyUp() {
 
@@ -546,13 +724,95 @@ export class NuevaComponent implements OnInit {
     this._snackBar.open(mensjae, '', {
       horizontalPosition: this.horizontalPosition,
       verticalPosition: this.verticalPosition,
-      duration: 2000
+      duration: 3000
     });
   }
   //-------------------------------
+  percentDone: number;
+  uploadSuccess: boolean;
+
+
+  upload(files: File[]){
+
+    var formData = new FormData();
+    Array.from(files).forEach(f => formData.append('file', f))
+    this.http.post('https://file.io', formData)
+      .subscribe(event => {
+        console.log('done')
+      })
+
+  }
+
+  clickeaste(){
+    if(Math.round(this.Archivo.nativeElement.files[0].size / 1024) <= 20480)//son KB
+    {
+      this.NombreArchivo = this.Archivo.nativeElement.files[0].name;
+    }
+    else{
+
+      this.Archivo.nativeElement.value = "";
+      this.NombreArchivo = "";
+      this.openSnackBar('No se permite subir archivos de 20 MB o más.');
+    }
+  }
+
+  subirArchivo(){
+    //console.log(this.Archivo.nativeElement.files[0]);
+    //this.Archivo.nativeElement.target.files
+    const archivo$ = this._archivosService.subirArchivo(this.idRegistroGlobal,this.Archivo.nativeElement.files[0]).subscribe(
+      {
+        next:(data) =>{
+
+          if(data['generatedName'].length>0){
+            console.log(data);
+            console.log(data['generatedName']);
+            this.listarArchivos(this.idRegistroGlobal);
+            this.openSnackBar('Se ha subido correctamente el archivo: '+ this.Archivo.nativeElement.files[0].name);
+            this.Archivo.nativeElement.value = "";
+            this.NombreArchivo = "";
+          }
+        },
+        error:(errores)=>{
+
+          console.error(errores);
+
+        },
+        complete:()=>{
+
+        }
+      }
+    );
+    this.suscripciones.push(archivo$);
+
+  }
+
+  eliminarArchivo(_idArchivo:number, _nombreArchivo:string){
+    console.log(_idArchivo);
+    const eliminarArchivo$ = this._subirArchivosService.eliminarArchivo(_idArchivo).subscribe(
+      {
+        next:(data) =>{
+          if(data){
+            this.listarArchivos(this.idRegistroGlobal);
+            this.openSnackBar('Se ha eliminado correctamente el archivo: '+ _nombreArchivo);
+          }
+        },
+        error:(errores)=>{
+
+          console.error(errores);
+
+        },
+        complete:()=>{
+
+        }
+      }
+    );
+    this.suscripciones.push(eliminarArchivo$);
+  }
+
+    //
 
   getFile($event){
-    this.filePdf = $event;
+    /*this.filePdf = $event;
 
     this.filePdf.forEach(element => {
 
@@ -564,13 +824,13 @@ export class NuevaComponent implements OnInit {
       this.formNuevaSolicitud.value['documentoNombre'].setValue(element.documentoNombre_nombreOriginal);
 
       this.formNuevaSolicitud.value['documentoNombre'].updateValueAndValidity();
-
+      //--------------------------------------------------------------------------------------
       /*this.formulario.documentoNombre_nombreOriginal.setValue(element.documentoNombre_nombreOriginal);
       this.formulario.documentoNombre_nombreOriginal.updateValueAndValidity();
 
       this.formulario.documentoNombre.setValue(element.documentoNombre);
-      this.formulario.documentoNombre.updateValueAndValidity();*/
-    });
+      this.formulario.documentoNombre.updateValueAndValidity();
+    });*/
   }
 
   //get formulario() { return this.formNuevaSolicitud.controls}

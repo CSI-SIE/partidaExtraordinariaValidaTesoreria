@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { InicioModule } from './inicio/inicio.module';
 import { NuevaComponent } from './nueva/nueva.component';
 import { ValidaDirectorVicerrectorComponent } from './valida-director-vicerrector/valida-director-vicerrector.component';
 import { ValidaDTIComponent } from './valida-dti/valida-dti.component';
@@ -16,7 +15,11 @@ const routes: Routes = [
   },
   {
     path: 'inicio',
-    loadChildren: () => import('./inicio/inicio.module').then(m => InicioModule)
+    loadChildren: () => import('./inicio/inicio.module').then(m => m.InicioModule)
+  },
+  {
+    path: 'debe-iniciar-sesion-SIE',
+    loadChildren:()=>import('./sesion-sie/sesion-sie.module').then(m => m.SesionSieModule)
   },
   {
     path: 'nuevo',
