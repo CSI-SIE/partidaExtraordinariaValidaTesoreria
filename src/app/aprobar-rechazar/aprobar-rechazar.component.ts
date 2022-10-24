@@ -110,13 +110,13 @@ export class AprobarRechazarComponent implements OnInit {
         //recorro y agrego la extensión del archivo a el modelo de archivos
         archivos.forEach(element => {
           if(element['nombreArchivo']){
-            //console.log(element['nombreArchivo']);
-            //console.log(element['nombreArchivo'].split(".").pop());
+            ////console.log(element['nombreArchivo']);
+            ////console.log(element['nombreArchivo'].split(".").pop());
             element['extension'] = element['nombreArchivo'].split(".").pop();
           }
         });
         this.modeloArchivo = archivos;
-        console.log(archivos);
+        //console.log(archivos);
        },
       error: (errores) => {
         console.error(errores);
@@ -257,13 +257,13 @@ export class AprobarRechazarComponent implements OnInit {
     dialogRef$.afterClosed().subscribe(result =>{
       if(result == undefined)
       {
-        console.log('Se canceló el Rechazo');
+        //console.log('Se canceló el Rechazo');
       }
       else
       {
         motivo = result;
 
-        console.log('Se va a rechazar la partida con el id: ' + id);
+        //console.log('Se va a rechazar la partida con el id: ' + id);
 
 
         //-----------------------------------------------------------------------------------------
@@ -378,11 +378,11 @@ export class AprobarRechazarComponent implements OnInit {
     /*dialogRef$.afterClosed().subscribe(result =>{
       if(result == undefined)
       {
-        console.log('Se cerró la ventana sin guardar nada.');
+        //console.log('Se cerró la ventana sin guardar nada.');
       }
       else
       {
-        console.log("Aquí se va a ejecutar el Guardar con monto final.");
+        //console.log("Aquí se va a ejecutar el Guardar con monto final.");
       }
     });*/
   }

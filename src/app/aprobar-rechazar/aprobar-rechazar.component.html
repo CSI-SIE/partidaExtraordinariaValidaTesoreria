@@ -23,6 +23,10 @@
         <!--Columna de la izquierda-->
         <div fxLayout="column" fxFlex="50">
 
+          <p><strong>Solicitada por: </strong>{{this.data.valor.nombrePersonaCaptura}}</p>
+          <mat-divider></mat-divider>
+          <br>
+
           <p><strong>Descripción: </strong>{{this.data.valor.descripcion}}</p>
           <mat-divider></mat-divider>
           <br>
@@ -41,7 +45,7 @@
         <!--Columna de la derecha-->
         <div fxLayout="column" fxFlex="40">
           <div fxLayout="column">
-            <p><strong>Costo total: </strong>{{this.data.valor.costo | currency}}</p>
+            <p><strong>Importe con IVA incluido: </strong>{{this.data.valor.costo | currency}}</p>
           </div>
           <mat-divider></mat-divider>
           <!--Detalle por conceptos-->
@@ -76,7 +80,10 @@
       <mat-divider></mat-divider>
       <p><strong>Seguimiento a la solicitud</strong></p>
       <ng-container>
-        <p><strong>Director / Vicerrector</strong></p> <p *ngIf="this.data.valor.comentarioRechazoDirectorVicerrector">Motivo del rechazo: {{this.data.valor.comentarioRechazoDirectorVicerrector}}</p>
+        <p><strong>Director / Vicerrector</strong></p>
+        <p *ngIf="this.data.valor.validaDirectorVicerrector == 1">Aprobada por: {{this.data.valor.nombreValidaDirectorVicerrector}}</p>
+        <p *ngIf="this.data.valor.validaDirectorVicerrector == 2">Rechazada por: {{this.data.valor.nombreValidaDirectorVicerrector}}</p>
+        <p *ngIf="this.data.valor.comentarioRechazoDirectorVicerrector || this.data.valor.validaDirectorVicerrector == 2">Motivo del rechazo: {{this.data.valor.comentarioRechazoDirectorVicerrector}}</p>
         <ng-container>
 
           <span *ngIf="this.data.valor.validaDirectorVicerrector == 1" class="material-icons green-icon" matTooltip="Aprobado"><!--APROBADO-->
@@ -86,7 +93,7 @@
             thumb_down
           </span>
           <span *ngIf="this.data.valor.validaDirectorVicerrector == 0" class="material-icons blue-icon" matTooltip="En proceso de revisión"><!--EN PROCESO DE REVISIÓN-->
-            block_flipped
+            hourglass_top
           </span>
       </ng-container>
 
@@ -94,7 +101,10 @@
       <br>
       <mat-divider></mat-divider>
       <ng-container>
-        <p><strong>Rector / Director administrativo</strong></p> <p *ngIf="this.data.valor.comentarioRechazoRectorDirAdmin">Motivo del rechazo: {{this.data.valor.comentarioRechazoRectorDirAdmin}}</p>
+        <p><strong>Rector / Director administrativo</strong></p>
+        <p *ngIf="this.data.valor.validaRectorDirAdmin == 1">Aprobada por: {{this.data.valor.nombreValidaRectorDirAdmin}}</p>
+        <p *ngIf="this.data.valor.validaRectorDirAdmin == 2">Rechazada por: {{this.data.valor.nombreValidaRectorDirAdmin}}</p>
+        <p *ngIf="this.data.valor.comentarioRechazoRectorDirAdmin || this.data.valor.validaRectorDirAdmin == 2">Motivo del rechazo: {{this.data.valor.comentarioRechazoRectorDirAdmin}}</p>
         <ng-container>
 
           <span *ngIf="this.data.valor.validaRectorDirAdmin == 1" class="material-icons green-icon" matTooltip="Aprobado"><!--APROBADO-->
@@ -104,7 +114,7 @@
             thumb_down
           </span>
           <span *ngIf="this.data.valor.validaRectorDirAdmin == 0" class="material-icons blue-icon" matTooltip="En proceso de revisión"><!--EN PROCESO DE REVISIÓN-->
-            block_flipped
+            hourglass_top
           </span>
       </ng-container>
       </ng-container>
@@ -113,7 +123,10 @@
       <ng-container *ngIf="this.data.valor.equipoComputo == 1">
         <br>
         <mat-divider></mat-divider>
-        <p><strong>Dirección de Tecnologías de la Información (DTI)</strong></p> <p *ngIf="this.data.valor.comentarioRechazoDTI">Motivo del rechazo: {{this.data.valor.comentarioRechazoDTI}}</p>
+        <p><strong>Dirección de Tecnologías de la Información (DTI)</strong></p>
+        <p *ngIf="this.data.valor.validaDTI == 1">Aprobada por: {{this.data.valor.nombreValidaDTI}}</p>
+        <p *ngIf="this.data.valor.validaDTI == 2">Rechazada por: {{this.data.valor.nombreValidaDTI}}</p>
+        <p *ngIf="this.data.valor.comentarioRechazoDTI || this.data.valor.validaDTI == 2">Motivo del rechazo: {{this.data.valor.comentarioRechazoDTI}}</p>
         <ng-container >
 
           <span *ngIf="this.data.valor.validaDTI == 1" class="material-icons green-icon" matTooltip="Aprobado"><!--APROBADO-->
@@ -123,7 +136,7 @@
             thumb_down
           </span>
           <span *ngIf="this.data.valor.validaDTI == 0 || this.data.valor.validaDTI == null" class="material-icons blue-icon" matTooltip="En proceso de revisión"><!--EN PROCESO DE REVISIÓN-->
-            block_flipped
+            hourglass_top
           </span>
       </ng-container>
       </ng-container>
@@ -132,14 +145,17 @@
         <br>
       <mat-divider></mat-divider>
         <p><strong>Estatus compras</strong></p>
+        <p *ngIf="this.data.valor.aplicada == 1">Atendida por: {{this.data.valor.nombrequienAtendio}}</p>
+        <p *ngIf="this.data.valor.aplicada == 2">Revisada por: {{this.data.valor.nombrequienAtendio}}</p>
+
         <span *ngIf="this.data.valor.aplicada == 1" class="material-icons green-icon" matTooltip="Aprobado"><!--APROBADO-->
           thumb_up
         </span>
-        <span *ngIf="this.data.valor.aplicada == 2" class="material-icons red-icon" matTooltip="En proceso de concluir"><!--RECHAZADO-->
+        <span *ngIf="this.data.valor.aplicada == 2" class="material-icons red-icon" matTooltip="En proceso de concluir"><!--POR CERRAR-->
           pause
         </span>
         <span *ngIf="this.data.valor.aplicada == 0" class="material-icons blue-icon" matTooltip="En proceso de revisión"><!--EN PROCESO DE REVISIÓN-->
-          block_flipped
+          hourglass_top
         </span>
         <p *ngIf="this.data.valor.aplicada == null" matTooltip="No aplica"><!--N/A-->
           N/A
@@ -218,13 +234,13 @@
       </span>
     </button>
 
-    <button *ngIf="this.data.modulo== 'compras' && this.data.valor.aplicada == 2" (click)="montoFinal()" type="button" mat-dialog-close="true" mat-flat-button color="primary" mat-button matTooltip="Terminar todo el proceso de la solicitud">
+    <button *ngIf="this.data.valor.mostrarBotonTerminar == 1 && this.data.modulo== 'compras' && this.data.valor.aplicada == 2" (click)="montoFinal()" type="button" mat-dialog-close="true" mat-flat-button color="primary" mat-button matTooltip="Terminar todo el proceso de la solicitud">
       <span class="material-icons">
         check
       </span> Terminar solicitud
     </button>
 
-    <button *ngIf="this.data.modulo== 'compras' && this.data.valor.aplicada == 0" (click)="validarCompras(this.data.valor.idRegistro)" type="button" mat-dialog-close="true" mat-flat-button color="primary" mat-button matTooltip="En proceso de concluir con la solicitud">
+    <button *ngIf="this.data.valor.mostrarBotonTerminar == 1 && this.data.modulo== 'compras' && this.data.valor.aplicada == 0" (click)="validarCompras(this.data.valor.idRegistro)" type="button" mat-dialog-close="true" mat-flat-button color="primary" mat-button matTooltip="En proceso de concluir con la solicitud">
       <span class="material-icons">
         pause
       </span> Por concluir

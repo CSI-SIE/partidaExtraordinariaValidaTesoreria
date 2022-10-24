@@ -12,7 +12,7 @@ export class UploadDownloadService extends ServicioArchivos {
   ) { super(_sb); }
 
   public subirArchivo(_idRegistro: number, _fileDialog:File){
-    //console.log(_fileDialog);
+    ////console.log(_fileDialog);
     const parametros = {
       idPartida: _idRegistro,
       file: _fileDialog,

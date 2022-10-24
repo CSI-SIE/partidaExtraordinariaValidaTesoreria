@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injectable, OnInit } from '@angular/core';
 import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -6,6 +6,15 @@ import { Subscription } from 'rxjs';
 import { Periodo } from 'src/shared/models/periodo.model';
 import { resultadosValidaDirectorVicerrector } from 'src/shared/models/tabla.model';
 import { ValidaRechazaService } from '../services/validaRechaza.service';
+
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
+const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+const EXCEL_EXTENSION = '.xlsx';
+
+@Injectable({
+  providedIn: 'root'
+})
 
 @Component({
   selector: 'valida-tesoreria',
@@ -56,14 +65,16 @@ export class ValidaTesoreriaComponent implements OnInit {
       validacionDTI: ['ESTATUS DTI'],
       fechaAtendida:['FECHA ATENCION COMPRAS'],
       aplicada: ['ESTATUS COMPRAS'],
-      costo: ['MONTO'],
-      montoReal: ['MONTO REAL'],
+      costo: ['IMPORTE CON IVA INCLUIDO'],
+      montoReal: ['IMPORTE CON IVA INCLUIDO REAL'],
       verCompras: [''],
       paraMostrar: ['descripcion','fechaSolicitud','fechaAutorizacionRec','validacionDTI','fechaAutorizacionDTI','aplicada','fechaAtendida', 'costo','montoReal', 'verCompras']
     }
 
     };
   //------------------------------------
+
+  rutaDelGeneradorDeReportes = "https://sie.iest.edu.mx/app/escolar/GeneraExcel2.php?";
 
   constructor(private _fb: UntypedFormBuilder,
     private _validaRechazaService: ValidaRechazaService,
@@ -138,7 +149,7 @@ export class ValidaTesoreriaComponent implements OnInit {
                 this.opcionPorDefault = element.idPeriodo;
               }
             });
-            //console.log(data);
+            ////console.log(data);
           },
           error: (errores) =>{
             console.error(errores);
@@ -159,7 +170,7 @@ export class ValidaTesoreriaComponent implements OnInit {
       this.resultadosPartidasExtraordinarias = []; //Limpio el resultado
 
       const buscaForm$ = this._validaRechazaService.recuperaValidaTesoreria(
-        this.formularioValidaciones.value['Descripcion'],
+        this.formularioValidaciones.value['Descripcion'], //periodo
         this.idPerson
         ).subscribe(
         {
@@ -266,6 +277,56 @@ export class ValidaTesoreriaComponent implements OnInit {
         }
       }
       return false;
+    }
+
+    //Exportar a Excel -------------------
+  public exportarExcel(){
+    //--------------------------------------------------------------------------------------
+
+    var param = "query=exec iest.dbo.Pre_Listado_PartidasExtraordinariasTesoreria '"+
+    4 + "', '" + 0 + "', '" + 0 + "', '" + 97 + "', '" + 0 + "', '" + 0 +"'";
+
+    document.location.href = this.rutaDelGeneradorDeReportes + param;
+    //"exec Pre_Listado_PartidasExtraordinariasTesoreria '".$idAccion."', '".$idPartida."', '".$idPersonCaptura."', '".$periodo."', '".$aceptoRehazo."', '".$costo."'";
+
+    //var param = "query=exec iest.dbo.NOM_ConcentradoMaestrosListadoHoras '"+
+    //periodo+"','" + mes+"'";
+
+    //this.openSnackBar();
+
+
+//--------------------------------------------------------------------------------------
+  }
+
+  public exportAsExcelFile(json: any[], excelFileName: string): void {
+
+
+
+      const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
+      const workbook: XLSX.WorkBook = { Sheets: { 'Hoja1': worksheet },
+      SheetNames: ['Hoja1'] };
+      const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array'
+    });
+    this.saveAsExcelFile(excelBuffer, excelFileName);
+  }
+
+  private saveAsExcelFile(buffer: any, fileName: string): void {
+      const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
+      FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() +
+       EXCEL_EXTENSION);
+  }
+    //------------------------------------
+
+    private tratarJson(json:any[]){
+      var arreglado = json.map( item => {
+        // lo guardas temporalmente
+        var temporal = item.idRegistro;
+        // eliminas el valor que ya no quieres
+        delete item.idRegistro;
+        // creas el valor nuevo.
+        item.idREGISTRO = temporal;
+        return item;
+      });
     }
 
 }

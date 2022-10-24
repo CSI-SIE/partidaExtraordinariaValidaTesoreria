@@ -27,6 +27,7 @@ import { ValidaDTIComponent } from '../valida-dti/valida-dti.component';
 import { ValidaRectorAdministrativoComponent } from '../valida-rector-administrativo/valida-rector-administrativo.component';
 import { ValidaTesoreriaComponent } from '../valida-tesoreria/valida-tesoreria.component';
 import { CostoFinalComponent } from '../costo-final/costo-final.component';
+import { MatTableExporterModule } from 'mat-table-exporter';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { CostoFinalComponent } from '../costo-final/costo-final.component';
     ValidaRectorAdministrativoComponent,
     ValidaTesoreriaComponent,
     CostoFinalComponent
+
   ],
   imports: [
     CommonModule,
@@ -55,7 +57,7 @@ import { CostoFinalComponent } from '../costo-final/costo-final.component';
     MatPaginatorModule,
     FormsModule,
     FlexLayoutModule,
-    MatDividerModule,
+    MatDividerModule
 
   ],
   providers: [],

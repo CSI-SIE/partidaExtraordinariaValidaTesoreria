@@ -131,7 +131,7 @@ export class ValidaRectorAdministrativoComponent implements OnInit {
   reiniciarFiltros(){
 
     this.filtro = '';
-    console.log("Filtro reiniciado");
+    //console.log("Filtro reiniciado");
   }
 
   ngOnInit(): void {
@@ -172,7 +172,7 @@ export class ValidaRectorAdministrativoComponent implements OnInit {
                 this.opcionPorDefault = element.idPeriodo;
               }
             });
-            //console.log(data);
+            ////console.log(data);
           },
           error: (errores) =>{
             console.error(errores);
@@ -192,7 +192,7 @@ export class ValidaRectorAdministrativoComponent implements OnInit {
     this.resultadosPartidasExtraordinarias1 = [];
     this.resultadosPartidasExtraordinarias2 = [];
     this.resultadosPartidasExtraordinarias3 = [];
-    console.log(this.formularioValidaciones.value['Descripcion']);
+    //console.log(this.formularioValidaciones.value['Descripcion']);
     //------------------------------------------------------------------------------------------
     const buscaForm$ = this._validaRechazaService.recuperaValidaRectorAdmin(
       this.formularioValidaciones.value['Descripcion'],
@@ -217,7 +217,7 @@ export class ValidaRectorAdministrativoComponent implements OnInit {
           }
           });
           this.resultadosPartidasExtraordinarias1 = data;
-          //console.log(this.resultadosPartidasExtraordinarias1);
+          ////console.log(this.resultadosPartidasExtraordinarias1);
           if(this.resultadosPartidasExtraordinarias1.length<=0)
           {this.sinResultados1 = true;}
           else{this.sinResultados1 = false;}
@@ -256,7 +256,7 @@ export class ValidaRectorAdministrativoComponent implements OnInit {
           });
           data = data.filter((item)=> item.validaDirectorVicerrector==1);
           this.resultadosPartidasExtraordinarias2 = data;
-          console.log(this.resultadosPartidasExtraordinarias2);
+          //console.log(this.resultadosPartidasExtraordinarias2);
           if(this.resultadosPartidasExtraordinarias2.length<=0)
           {this.sinResultados2 = true;}
           else{this.sinResultados2 = false;}
@@ -295,7 +295,7 @@ export class ValidaRectorAdministrativoComponent implements OnInit {
           });
           data = data.filter((item)=> item.validaDirectorVicerrector==0);
           this.resultadosPartidasExtraordinarias3 = data;
-          //console.log(this.resultadosPartidasExtraordinarias3);
+          ////console.log(this.resultadosPartidasExtraordinarias3);
           if(this.resultadosPartidasExtraordinarias3.length<=0)
           {this.sinResultados3 = true;}
           else{this.sinResultados3 = false;}
@@ -376,15 +376,15 @@ export class ValidaRectorAdministrativoComponent implements OnInit {
 
 
   tabChanged(tabChangeEvent: MatTabChangeEvent): void {
-    console.log('tabChangeEvent => ', tabChangeEvent);
-    //console.log('index => ', tabChangeEvent.index);
+    //console.log('tabChangeEvent => ', tabChangeEvent);
+    ////console.log('index => ', tabChangeEvent.index);
 
     if(tabChangeEvent.index ==0){
-      console.log('Pestaña Pendientes seleccionada');
+      //console.log('Pestaña Pendientes seleccionada');
       this.filtro='';
     }
     if(tabChangeEvent.index ==2){
-      console.log('Pestaña Partidas pendientes por jefe seleccionada');
+      //console.log('Pestaña Partidas pendientes por jefe seleccionada');
       this.filtro='';
     }
   }

@@ -43,14 +43,14 @@ export class ProgressBarComponent implements OnInit {
     this.progress = (this.progress / this.total) * 100;
     if(this.progress < 55) {
     this.color = 'red';
-    //console.log("la barra del progress es roja");
+    ////console.log("la barra del progress es roja");
     } else if(this.progress < 75) {
     this.color= 'yellow';
-    //console.log("la barra del progress es amarilla");
+    ////console.log("la barra del progress es amarilla");
     } else {
 
     this.color = 'green';
-    // console.log("la barra del progress es verde");
+    // //console.log("la barra del progress es verde");
     }
  }
 

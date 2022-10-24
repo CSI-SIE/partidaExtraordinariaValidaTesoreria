@@ -1,5 +1,5 @@
 {
-  "name": "captura-partida-extraordinaria",
+  "name": "valida-tesoreria",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -21,7 +21,9 @@
     "@angular/platform-browser": "^14.0.0",
     "@angular/platform-browser-dynamic": "^14.0.0",
     "@angular/router": "^14.0.0",
+    "file-saver": "^2.0.5",
     "iest-theme-material": "github:CSI-SIE/iest-theme-material",
+    "mat-table-exporter": "^10.2.4",
     "ng2-file-upload": "^1.4.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

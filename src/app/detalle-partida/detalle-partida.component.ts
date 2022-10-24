@@ -58,7 +58,7 @@ export class DetallePartidaComponent implements OnInit {
      }
    );
    this.suscripciones.push(obtenerConceptosDetalle$);
-   // console.log(this.data.valor.idRegistro);
+   // //console.log(this.data.valor.idRegistro);
 
   //Listar archivos-----------------
   const obtenerlistardearchivosdelasolicitud$ = this._subirArchivosService.listaArchivosCotizacion(
@@ -69,13 +69,13 @@ export class DetallePartidaComponent implements OnInit {
         //recorro y agrego la extensión del archivo a el modelo de archivos
         archivos.forEach(element => {
           if(element['nombreArchivo']){
-            //console.log(element['nombreArchivo']);
-            //console.log(element['nombreArchivo'].split(".").pop());
+            ////console.log(element['nombreArchivo']);
+            ////console.log(element['nombreArchivo'].split(".").pop());
             element['extension'] = element['nombreArchivo'].split(".").pop();
           }
         });
         this.modeloArchivo = archivos;
-        console.log(archivos);
+        //console.log(archivos);
        },
       error: (errores) => {
         console.error(errores);
@@ -98,7 +98,7 @@ export class DetallePartidaComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChange){
-    console.log(changes);
+    //console.log(changes);
   }
 
   descargarArchivo(llave){

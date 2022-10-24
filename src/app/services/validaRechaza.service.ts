@@ -197,7 +197,7 @@ export class ValidaRechazaService extends ServicioBase {
       idPartida: '',
       idPersonCaptura: _idPersonCaptura,
       aceptoRehazo: '',
-      periodo: _Periodo,//96 idPeriodo
+      periodo: _Periodo,//96 idPeriodo  ENERO-JULIO 2022
       costo: '',
       tipoRespuesta: 'json'
     };

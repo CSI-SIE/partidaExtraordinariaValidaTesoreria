@@ -23,7 +23,7 @@ export class RechazarComponent implements OnInit {
   public activo = false;
 
   validacionTextArea(){
-    console.log(this.data.motivo);
+    //console.log(this.data.motivo);
     if(this.data.motivo.length <=0)
     {
       this.activo = false;

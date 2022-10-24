@@ -140,7 +140,7 @@ export class ValidaDirectorVicerrectorComponent implements OnInit {
               this.opcionPorDefault = element.idPeriodo;
             }
           });
-          //console.log(data);
+          ////console.log(data);
         },
         error: (errores) =>{
           console.error(errores);
@@ -192,7 +192,7 @@ export class ValidaDirectorVicerrectorComponent implements OnInit {
 
 
           this.resultadosPartidasExtraordinarias = data;
-          console.log(this.resultadosPartidasExtraordinarias);
+          //console.log(this.resultadosPartidasExtraordinarias);
           if(this.resultadosPartidasExtraordinarias.length<=0)
           {this.sinResultados = true;}
           else

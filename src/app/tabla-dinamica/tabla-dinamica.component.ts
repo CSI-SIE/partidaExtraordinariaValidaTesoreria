@@ -51,8 +51,8 @@ export class TablaDinamicaComponent implements OnInit {
 
   editar(valor){
     this.router.navigateByUrl('/editar/' + valor['idRegistro']);
-    console.log('editar');
-    console.log(valor['idRegistro']);
+    //console.log('editar');
+    //console.log(valor['idRegistro']);
   }
 
   eliminar(valor){
@@ -69,13 +69,13 @@ export class TablaDinamicaComponent implements OnInit {
 
       if(result == undefined)
       {
-        console.log('Se canceló la eliminación');
+        //console.log('Se canceló la eliminación');
       }
       else
       {
         motivo = result;
 
-        console.log('Se va a eliminar el id: ' + valor['idRegistro']);
+        //console.log('Se va a eliminar el id: ' + valor['idRegistro']);
 
         const eliminarSolicitud$ = this._catalogosService.eliminarPartidaExtraOrdinaria(valor['idRegistro'], this.idPerson).subscribe(
           {
@@ -124,7 +124,7 @@ export class TablaDinamicaComponent implements OnInit {
 
     //para saber que el botón fue seleccionado
     dialogRef.afterClosed().subscribe(result =>{
-      console.log(`Resultado: ${result}`);
+      //console.log(`Resultado: ${result}`);
     })
   }
 
@@ -140,7 +140,7 @@ export class TablaDinamicaComponent implements OnInit {
 
     //para saber que el botón fue seleccionado
     dialogRef.afterClosed().subscribe(result =>{
-      console.log(`Resultado: ${result}`);
+      //console.log(`Resultado: ${result}`);
     })
   }
 
@@ -155,7 +155,7 @@ export class TablaDinamicaComponent implements OnInit {
     });
     //para saber que el botón fue seleccionado
     dialogRef.afterClosed().subscribe(result =>{
-      console.log(`Resultado: ${result}`);
+      //console.log(`Resultado: ${result}`);
     })
   }
 
@@ -170,7 +170,7 @@ export class TablaDinamicaComponent implements OnInit {
     });
     //para saber que el botón fue seleccionado
     dialogRef.afterClosed().subscribe(result =>{
-      console.log(`Resultado: ${result}`);
+      //console.log(`Resultado: ${result}`);
     })
   }
 
@@ -182,7 +182,7 @@ export class TablaDinamicaComponent implements OnInit {
   addData() {
     this.cdRef.detectChanges();
     //seteo los datos de la tabla despues de cargarse la vista y detecto los cambios
-    //console.log(this.resultadosPartidasExtraordinarias);
+    ////console.log(this.resultadosPartidasExtraordinarias);
     //this.dataSource.data = this.resultadosPartidasExtraordinarias;
     this.dataSource = new MatTableDataSource<Solicitud[]>(this.resultadosPartidasExtraordinarias);
     this.cdRef.detectChanges();
@@ -219,16 +219,16 @@ ngOnChanges(changes: SimpleChanges) {
     //let curVal  = JSON.stringify(change.currentValue);
     //let prevVal = JSON.stringify(change.previousValue);
 
-          /*console.log(curVal);
-          console.log('-------------------------------------');
-          console.log(prevVal);*/
+          /*//console.log(curVal);
+          //console.log('-------------------------------------');
+          //console.log(prevVal);*/
   }
 
 
 
 /*
   let fil = changes['filtro'];
-  console.log(fil);
+  //console.log(fil);
   if(!fil.firstChange){
     this.aplicarFiltro(fil);
   }*/
@@ -239,11 +239,11 @@ ngOnChanges(changes: SimpleChanges) {
     let curVal  = JSON.stringify(change.currentValue);
     let prevVal = JSON.stringify(change.previousValue);
 
-          console.log(curVal);
-          console.log(prevVal);
+          //console.log(curVal);
+          //console.log(prevVal);
        }*/
 
-  //console.log(changes);
+  ////console.log(changes);
 }
 
 }

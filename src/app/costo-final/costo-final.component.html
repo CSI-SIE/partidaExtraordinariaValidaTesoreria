@@ -2,7 +2,7 @@
   <div fxLayout="column" fxLayoutAlign="center center" class="container" >
     <form [formGroup]="formCostoFinal" (ngSubmit)="onSubmit()">
       <div fxLayoutAlign="center">
-        <p>Costo total: </p>
+        <p>Importe con IVA incluido capturado: </p>
         <p> {{this.data.monto | currency}}</p>
         <br>
       </div>
@@ -10,7 +10,7 @@
       <br>
       <div fxLayoutAlign="center">
         <mat-form-field appearance="outline">
-          <mat-label>Costo real:</mat-label>
+          <mat-label>Importe real con IVA:</mat-label>
           <input type="number" formControlName="CostoReal" matInput placeholder="0000.00">
         </mat-form-field>
       </div>

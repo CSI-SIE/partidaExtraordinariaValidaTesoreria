@@ -236,13 +236,13 @@ export class NuevaComponent implements OnInit {
   }
 
   clickCambiaronTipoSeleccion(event:any){
-    /*console.log(this.detalles.controls);
+    /*//console.log(this.detalles.controls);
     this.detalles.controls['ConceptoPorDetalle'].setValidators([Validators.required]);
     this.detalles.updateValueAndValidity();
-    console.log(this.detalles.controls);
+    //console.log(this.detalles.controls);
     */
 
-    console.log(event.value);
+    //console.log(event.value);
     if(event.value != 'Compra general'){
       this.detalles.clear();
       this.addDetalleConcepto();
@@ -263,8 +263,8 @@ export class NuevaComponent implements OnInit {
       this.detalles.controls[0].get('Monto').updateValueAndValidity;
       */
     }
-    //console.log(this.detalles);
-    //console.log(this.detalles.controls[0].get('ConceptoPorDetalle').setValidators([Validators.required]));
+    ////console.log(this.detalles);
+    ////console.log(this.detalles.controls[0].get('ConceptoPorDetalle').setValidators([Validators.required]));
 
   }
 
@@ -322,7 +322,7 @@ export class NuevaComponent implements OnInit {
         let conceptosCorrectos:boolean = true;
         for(let elem of this.detalles.controls)
         {
-          console.log(elem.value['ConceptoPorDetalle']);
+          //console.log(elem.value['ConceptoPorDetalle']);
           if(elem.value['ConceptoPorDetalle'] != null)
           {
             if(elem.value['ConceptoPorDetalle'].length>0)
@@ -349,7 +349,7 @@ export class NuevaComponent implements OnInit {
           { equipoComputoNumerico =1 }
 
           //Limpio la variable quitandole el último carácter
-          console.log(conceptosyMontos.substring(0,conceptosyMontos.length-1));
+          //console.log(conceptosyMontos.substring(0,conceptosyMontos.length-1));
 
 
           if(this.idRegistroGlobal>0){//editar
@@ -390,7 +390,7 @@ export class NuevaComponent implements OnInit {
             const periodos$ = this._validaRechazaService.recuperaPeriodos().subscribe(
               {
                 next:(data) =>{
-                  //console.log(data);
+                  ////console.log(data);
                   data = data.filter((item)=>item.actual==1);//filtro para obtener el idPeriodo actual
                   idPeriodoActual = data[0]['idPeriodo'];
                 },
@@ -414,9 +414,9 @@ export class NuevaComponent implements OnInit {
                     ).subscribe(
                       {
                         next: (data) => {
-                          //console.log("<<<<<<<<<<<<<<<<Aquí>>>>>>>>>>>>");
-                          //console.log(data);
-                          //console.log(data[0]['idPartida']);
+                          ////console.log("<<<<<<<<<<<<<<<<Aquí>>>>>>>>>>>>");
+                          ////console.log(data);
+                          ////console.log(data[0]['idPartida']);
                           this.idRegistroGlobal = data[0]['idPartida'];
                           this.GuardadoCorrectamente = true;
                           this.formNuevaSolicitud.disable();
@@ -438,7 +438,7 @@ export class NuevaComponent implements OnInit {
                   }
                   else
                   {
-                    console.log('No se pudo obtener el IdPeriodo')
+                    //console.log('No se pudo obtener el IdPeriodo')
                   }
 
                 }
@@ -495,7 +495,7 @@ export class NuevaComponent implements OnInit {
             //this.detalles.removeAt(0);
             this.addDetalleConceptoConDatos(conceptos);
 
-            console.log(conceptos);
+            //console.log(conceptos);
            },
           error: (errores) => {
             console.error(errores);
@@ -520,7 +520,7 @@ export class NuevaComponent implements OnInit {
             }
             else{
               this.solicitudModel = data;
-            console.log(this.solicitudModel);
+            //console.log(this.solicitudModel);
             if(this.solicitudModel[0].borrado == 1 ||
               this.solicitudModel[0].validaDirectorVicerrector > 0 ||
               this.solicitudModel[0].validaRectorDirAdmin > 0 ||
@@ -533,7 +533,7 @@ export class NuevaComponent implements OnInit {
             }
 
             this.convertirTipoSeleccionadaNumToText(this.solicitudModel[0].tipoPartida);
-            console.log(this.solicitudModel[0].costo);
+            //console.log(this.solicitudModel[0].costo);
             let fijarDatos = { //Establesco los datos que vienen desde la DB
               Descripcion:  this.solicitudModel[0].descripcion,
               Justificacion: this.solicitudModel[0].justificacion,
@@ -542,7 +542,7 @@ export class NuevaComponent implements OnInit {
 
               EquipoComputo: this.solicitudModel[0].equipoComputo
             }
-            console.log(parseFloat(this.solicitudModel[0].costo));
+            //console.log(parseFloat(this.solicitudModel[0].costo));
             this.formNuevaSolicitud.patchValue(fijarDatos); //Seteo los datos obtenidos en cada control del formulario.
             }
 
@@ -556,7 +556,7 @@ export class NuevaComponent implements OnInit {
           }
         }
       );
-        console.log("idRegistro: ",idRegistro );
+        //console.log("idRegistro: ",idRegistro );
         this.suscripciones.push(obtenerSolicitud$);
 
 
@@ -595,13 +595,13 @@ export class NuevaComponent implements OnInit {
           //recorro y agrego la extensión del archivo a el modelo de archivos
           archivos.forEach(element => {
             if(element['nombreArchivo']){
-              //console.log(element['nombreArchivo']);
-              //console.log(element['nombreArchivo'].split(".").pop());
+              ////console.log(element['nombreArchivo']);
+              ////console.log(element['nombreArchivo'].split(".").pop());
               element['extension'] = element['nombreArchivo'].split(".").pop();
             }
           });
           this.modeloArchivo = archivos;
-          console.log(archivos);
+          //console.log(archivos);
          },
         error: (errores) => {
           console.error(errores);
@@ -738,7 +738,7 @@ export class NuevaComponent implements OnInit {
     Array.from(files).forEach(f => formData.append('file', f))
     this.http.post('https://file.io', formData)
       .subscribe(event => {
-        console.log('done')
+        //console.log('done')
       })
 
   }
@@ -757,15 +757,15 @@ export class NuevaComponent implements OnInit {
   }
 
   subirArchivo(){
-    //console.log(this.Archivo.nativeElement.files[0]);
+    ////console.log(this.Archivo.nativeElement.files[0]);
     //this.Archivo.nativeElement.target.files
     const archivo$ = this._archivosService.subirArchivo(this.idRegistroGlobal,this.Archivo.nativeElement.files[0]).subscribe(
       {
         next:(data) =>{
 
           if(data['generatedName'].length>0){
-            console.log(data);
-            console.log(data['generatedName']);
+            //console.log(data);
+            //console.log(data['generatedName']);
             this.listarArchivos(this.idRegistroGlobal);
             this.openSnackBar('Se ha subido correctamente el archivo: '+ this.Archivo.nativeElement.files[0].name);
             this.Archivo.nativeElement.value = "";
@@ -787,7 +787,7 @@ export class NuevaComponent implements OnInit {
   }
 
   eliminarArchivo(_idArchivo:number, _nombreArchivo:string){
-    console.log(_idArchivo);
+    //console.log(_idArchivo);
     const eliminarArchivo$ = this._subirArchivosService.eliminarArchivo(_idArchivo).subscribe(
       {
         next:(data) =>{
@@ -816,7 +816,7 @@ export class NuevaComponent implements OnInit {
 
     this.filePdf.forEach(element => {
 
-      //console.log(element);
+      ////console.log(element);
       this.formNuevaSolicitud.value['documentoNombre_nombreOriginal'].setValue(element.documentoNombre_nombreOriginal);
 
       this.formNuevaSolicitud.value['documentoNombre_nombreOriginal'].updateValueAndValidity();

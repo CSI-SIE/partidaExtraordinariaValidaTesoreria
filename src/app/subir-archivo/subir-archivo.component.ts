@@ -103,7 +103,7 @@ export class SubirArchivoComponent implements OnInit {
       try{
         this.subirArchivo(this.files);
       }catch(e){
-        console.log('error', e);
+        //console.log('error', e);
       }
     }else{
       textoDiv.setAttribute("data-text", "Seleccione archivo .pdf");

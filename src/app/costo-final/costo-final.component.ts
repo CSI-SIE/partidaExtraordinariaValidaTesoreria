@@ -46,8 +46,8 @@ export class CostoFinalComponent implements OnInit {
   ngOnInit(): void {
 
 
-    /*console.log(this.data.monto);
-    console.log("Entró a Costo final");*/
+    /*//console.log(this.data.monto);
+    //console.log("Entró a Costo final");*/
 
     //Busca una sesión======================
     const sesion$ = this._validaRechazaService.obtieneSesion().subscribe(

@@ -22,6 +22,7 @@ import { SesionSieComponent } from './sesion-sie/sesion-sie.component';
     MaterialModule,
     FlexLayoutModule,
     ReactiveFormsModule
+
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-  Consulta de partida extraordinaria
+  Control de partidas extraordinarias
 </mat-toolbar>
 
   <div class="container">
@@ -11,6 +11,7 @@
       </mat-select>
       <mat-error *ngIf="efValidarDirectorVicerrector.Descripcion">{{ efValidarDirectorVicerrector.Descripcion }}</mat-error>
     </mat-form-field>-->
+
     <div fxLayout="column">
 
       <div fxFlex fxLayout="row"  fxLayoutAlign="space-around center">
@@ -29,7 +30,7 @@
             fxLayout="row"
             fxLayout.xs="column"
             fxLayoutAlign="space-around center">
-             <button [disabled]="formularioValidaciones.invalid" (click)="disteClick()" mat-flat-button color="primary">Buscar</button>
+             <button [disabled]="formularioValidaciones.invalid" (click)="disteClick()" mat-raised-button color="primary">Buscar</button>
           </div>
         </form>
       </div>
@@ -37,6 +38,13 @@
     <br>
         <!--Radio buttons----------------------------------->
     <ng-container *ngIf="clickBusqueda">
+      <div fxLayout="row" fxLayoutAlign="end center">
+      <button *ngIf="!sinResultados" (click)="exportarExcel()" type="button" mat-stroked-button color="primary">
+
+        <span class="material-icons">
+        download
+        </span>Exportar a Excel</button>
+      </div>
       <mat-radio-group
 
       fxLayout="row"
@@ -76,7 +84,7 @@
       </div>
 
     </div>
-    <button [routerLink]="['/inicio']"  type="submit" mat-flat-button color="primary">Cancelar</button>
+
     <div fxLayout="row"
     fxLayout.xs="column"
     fxLayoutAlign="center center">
